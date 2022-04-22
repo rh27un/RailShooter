@@ -1,0 +1,12 @@
+Set number of lives (say 3)
+Chosen number of Continues (Say, choose between infinite, 10, 3, and none)
+When you die, you lose a life, and after a few seconds respawn at a set point. No progress is lost.
+When you run out of lives, you lose a continue, and progress is reset to the last checkpoint.
+When you run out of continues, the game is over and you must restart from the beginning.
+
+Modern mode gives you 0 lives but infinite continues, essentially working as a regular checkpoint system
+
+Things to serialize:
+train distance & speed
+score
+guns & ammo

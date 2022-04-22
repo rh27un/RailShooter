@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38fad5820e39db4dae39ac26d3e72df, type: 3}
+  m_Name: Bren Minigunner
+  m_EditorClassIdentifier: 
+  maxHealth: 200
+  gun: {fileID: 11400000, guid: bb16235ccf6eb03449bd63c81b74be81, type: 2}
+  firePredictiveProjectiles: 0
+  projectileSpeed: 990
+  dontFireTime: 10
+  fireTime: 10
+  waitBeforeAttack: 0
+  isCommander: 0
+  idealPlayerDistance: 10
+  fireRate: 0.1
+  damage: 5

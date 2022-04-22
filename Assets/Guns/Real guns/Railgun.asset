@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
+  m_Name: Railgun
+  m_EditorClassIdentifier: 
+  gunPrefab: {fileID: 781770156292755535, guid: 27aa6669eb4e4c94587a3db1ebf561e4,
+    type: 3}
+  projectilePrefab: {fileID: 0}
+  maxAmmo: 10
+  curAmmo: 4
+  multiShot: 1
+  fireRate: 1
+  reloadTime: 2
+  range: 100
+  damage: 100
+  splash: 0
+  splashRange: 0
+  fireDamage: 0
+  fireTime: 0
+  recoil: 20
+  aimedRecoil: 0
+  inaccuracy: 0
+  aimedFOV: 60
+  projectile: 0
+  projectileSpeed: 0
+  explodeOnImpact: 0
+  explodeTimer: 0
+  minChargeTime: 0.5
+  maxChargeTime: 5
+  multiShotCharge: 0
+  damageCharge: 1
+  splashRangeCharge: 0
+  recoilCharge: 1
+  inaccuracyCharge: 1
+  fireDamageCharge: 0

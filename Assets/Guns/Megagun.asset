@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
+  m_Name: Megagun
+  m_EditorClassIdentifier: 
+  gunPrefab: {fileID: 6908730330405206187, guid: 6b394ce888d417e49ac2299cb6198d80,
+    type: 3}
+  projectilePrefab: {fileID: 407173632034350334, guid: 5c1e43cc6d9c78649811b5b83c3bf251,
+    type: 3}
+  maxAmmo: 50
+  infiniteAmmo: 0
+  curAmmo: 50
+  storedAmmo: 999
+  multiShot: 10
+  fireRate: 1
+  reloadTime: 10
+  range: 0
+  damage: 20
+  splash: 1
+  splashRange: 2
+  fireDamage: 5
+  fireTime: 0
+  recoil: 15
+  aimedRecoil: 0
+  inaccuracy: 5
+  aimedFOV: 60
+  projectile: 1
+  projectileSpeed: 1000
+  explodeOnImpact: 0
+  explodeTimer: 2
+  minChargeTime: 0.5
+  maxChargeTime: 5
+  multiShotCharge: 1
+  damageCharge: 1
+  splashRangeCharge: 1
+  recoilCharge: 1
+  inaccuracyCharge: 1
+  fireDamageCharge: 1

@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
+  m_Name: Sumachine Gun
+  m_EditorClassIdentifier: 
+  gunPrefab: {fileID: 1466734283659604444, guid: ab064c2d42a92f84f82c458efaff9dbb,
+    type: 3}
+  projectilePrefab: {fileID: 0}
+  maxAmmo: 50
+  infiniteAmmo: 0
+  curAmmo: 0
+  storedAmmo: 88
+  multiShot: 1
+  fireRate: 0.05
+  reloadTime: 2
+  range: 100
+  damage: 8
+  splash: 0
+  splashRange: 0
+  fireDamage: 0
+  fireTime: 0
+  recoil: 0.3
+  aimedRecoil: 0.05
+  inaccuracy: 0
+  aimedFOV: 60
+  projectile: 0
+  projectileSpeed: 0
+  explodeOnImpact: 0
+  explodeTimer: 0
+  minChargeTime: 0
+  maxChargeTime: 0
+  multiShotCharge: 0
+  damageCharge: 0
+  splashRangeCharge: 0
+  recoilCharge: 0
+  inaccuracyCharge: 0
+  fireDamageCharge: 0
