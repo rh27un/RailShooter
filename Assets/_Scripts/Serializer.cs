@@ -40,7 +40,7 @@ public class Serializer : MonoBehaviour
 
 	void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		if (scene.name == "Init" || scene.name == "Leaderboard" || mode == LoadSceneMode.Additive)
+		if (scene.name == "Init" || scene.name == "Leaderboard" /*|| mode == LoadSceneMode.Additive*/)
 			return;
 		terrain = GameObject.FindGameObjectWithTag("Ground").transform;
 		SaveCheckpoint();

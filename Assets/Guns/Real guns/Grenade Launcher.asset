@@ -26,7 +26,7 @@ MonoBehaviour:
   range: 100
   damage: 50
   splash: 1
-  splashRange: 4
+  splashRange: 10
   fireDamage: 0
   fireTime: 0
   recoil: 1

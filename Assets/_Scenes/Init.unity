@@ -425,7 +425,7 @@ RectTransform:
   - {fileID: 2102596069}
   - {fileID: 980066083}
   m_Father: {fileID: 818078298}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1947,7 +1947,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 818078298}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &217523620
 GameObject:
@@ -6704,7 +6704,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 818078298}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: -7.47, z: 0}
 --- !u!114 &801479690
 MonoBehaviour:
@@ -6925,7 +6925,6 @@ Transform:
   - {fileID: 357945248}
   - {fileID: 820002549}
   - {fileID: 1158137657}
-  - {fileID: 1978426572}
   - {fileID: 1177410020}
   - {fileID: 1140830678}
   - {fileID: 189857088}
@@ -10069,7 +10068,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 818078298}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1060328970
 GameObject:
@@ -10449,7 +10448,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 818078298}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1153015193
 GameObject:
@@ -10573,6 +10572,7 @@ Transform:
   - {fileID: 1744986794}
   - {fileID: 290750356}
   - {fileID: 1423120098}
+  - {fileID: 1978426572}
   m_Father: {fileID: 818078298}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10774,7 +10774,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 818078298}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1190457643
 GameObject:
@@ -17324,7 +17324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754a91f7d3d7f24408be95e832386880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100000
+  maxHealth: 1000000
   enemyType: 
   hUDManager: {fileID: 1978426576}
   hurtColor: {r: 1, g: 0, b: 0, a: 0.46666667}
@@ -17967,8 +17967,8 @@ RectTransform:
   - {fileID: 1190457644}
   - {fileID: 1243992551}
   - {fileID: 1447251777}
-  m_Father: {fileID: 818078298}
-  m_RootOrder: 4
+  m_Father: {fileID: 1158137657}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -18166,7 +18166,7 @@ MonoBehaviour:
   stageData:
   - {fileID: 11400000, guid: cbaf756441bf03f47965dab3d3332e43, type: 2}
   - {fileID: 11400000, guid: 98ab0b42c2ba79949bf7446ee614e958, type: 2}
-  - {fileID: 11400000, guid: 98ab0b42c2ba79949bf7446ee614e958, type: 2}
+  - {fileID: 11400000, guid: 8f169e3c9270d354cbad4d7a5d6762bb, type: 2}
   enemiesToSpawn:
   - Cokril
   - Cokril Sniper

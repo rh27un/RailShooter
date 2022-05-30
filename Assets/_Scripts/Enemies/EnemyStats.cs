@@ -16,4 +16,5 @@ public class EnemyStats : ScriptableObject
 	public float idealPlayerDistance;
 	public float fireRate;
 	public float damage;
+	public GameObject projectilePrefab;
 }

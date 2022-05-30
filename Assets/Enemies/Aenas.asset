@@ -23,3 +23,5 @@ MonoBehaviour:
   idealPlayerDistance: 10
   fireRate: 0.2
   damage: 10
+  projectilePrefab: {fileID: 3259794017591400371, guid: 74f3ebd18e630664eb65a287549d42f7,
+    type: 3}

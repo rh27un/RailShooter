@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
 	protected NavMeshAgent agent;
 	public float startHealth = float.PositiveInfinity;
 
-	public GameObject projectilePrefab;
+	//
 	protected float lastFire;
 	protected EnemyState curState;
 	protected bool canSee;
@@ -68,9 +68,9 @@ public class Enemy : MonoBehaviour
 					{
 						if (!stats.firePredictiveProjectiles)
 						{
-							var newObject = Instantiate(projectilePrefab, transform.position, transform.rotation);
+							var newObject = Instantiate(stats.projectilePrefab, transform.position, transform.rotation);
 							newObject.GetComponent<Rigidbody>().AddForce(toPlayerVector.normalized * -stats.projectileSpeed);
-							newObject.GetComponent<EnemyProjectile>().damage = stats.damage;
+							//newObject.GetComponent<EnemyProjectile>().damage = stats.damage;
 							lastFire = Time.time;
 							Destroy(newObject, 10f);
 						}
@@ -78,9 +78,9 @@ public class Enemy : MonoBehaviour
 						{
 							
 							var toPredictedVector = transform.position - predictedPosition;
-							var newObject = Instantiate(projectilePrefab, transform.position, transform.rotation);
+							var newObject = Instantiate(stats.projectilePrefab, transform.position, transform.rotation);
 							newObject.GetComponent<Rigidbody>().AddForce(toPredictedVector.normalized * -stats.projectileSpeed);
-							newObject.GetComponent<EnemyProjectile>().damage = stats.damage;
+							//newObject.GetComponent<EnemyProjectile>().damage = stats.damage;
 							lastFire = Time.time;
 							Destroy(newObject, 10f);
 						}

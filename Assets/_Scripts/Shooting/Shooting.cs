@@ -377,7 +377,7 @@ public class Shooting : MonoBehaviour
 		{
 			for (int i = 0; i < _multiShot; i++)
 			{
-				GameObject newProj = Instantiate(projectilePrefab, gunLoc.position, gunLoc.rotation);
+				GameObject newProj = Instantiate(gun.projectilePrefab, gunLoc.position, gunLoc.rotation);
 				if (!gun.splash)
 				{
 					newProj.GetComponent<Projectile>().SetProperties(_damage);
@@ -452,6 +452,7 @@ public class Shooting : MonoBehaviour
 			gunObjects.Add(Instantiate(_gun.gunPrefab, hiddenGunStockpile, Quaternion.identity));
 			gunIndex = guns.Count - 1;
 			gun = guns[gunIndex];
+			gunLoc = gunObjects[gunIndex].transform;
 
 			isCharger = (gun.damageCharge || gun.fireDamageCharge || gun.inaccuracyCharge || gun.multiShotCharge || gun.recoilCharge || gun.splashRangeCharge);
 			spread = gun.inaccuracy;

@@ -57,6 +57,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -68,6 +70,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -80,6 +83,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &8005192420930935036
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -126,3 +130,6 @@ MonoBehaviour:
   splashRange: 0
   impact: 0
   timer: 0
+  explosion: {fileID: 6091658325320984705, guid: 555fa72ef23d4c34387fa00b74e1808d,
+    type: 3}
+  sphere: {fileID: 8609215952269491550, guid: baaa28db874df1c4099e33e97b752554, type: 3}

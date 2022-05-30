@@ -9,7 +9,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] protected float splashRange;
     [SerializeField] protected bool impact;
     [SerializeField] protected float timer;
-
+	[SerializeField] protected GameObject explosion;
+	[SerializeField] protected GameObject sphere;
 	public void SetProperties(float _dmg){
         damage = _dmg;
 		splash = false;
@@ -53,14 +54,28 @@ public class Projectile : MonoBehaviour
 		Debug.Log("Kaboom!");
 		Collider[] hitColliders = Physics.OverlapSphere(point, splashRange);
 		foreach(Collider c in hitColliders){
-			if(c.GetComponent<Health>()){
+			if (c.GetComponent<Health>())
+			{
 				Vector3 distance = transform.position - c.transform.position;
-				c.GetComponent<Health>().Damage(damage * (splashRange/ distance.magnitude));
+				var damageDealt = damage * (splashRange / distance.magnitude);
+				Debug.Log("Dealt " + damageDealt + " damage");
+				c.GetComponent<Health>().Damage(damageDealt);
+			}
+			else if (c.GetComponent<Hitbox>())
+			{
+				Vector3 distance = transform.position - c.transform.position;
+				var damageDealt = damage * (splashRange / distance.magnitude);
+				Debug.Log("Dealt " + damageDealt + " damage");
+				c.GetComponent<Hitbox>().Damage(damageDealt);
 			}
 			if(c.GetComponent<Rigidbody>()){
 				c.GetComponent<Rigidbody>().AddExplosionForce(damage, point, splashRange);
 			}
 		}
 		Destroy(gameObject);
+		Instantiate(explosion, point, Quaternion.identity);
+		var newSphere = Instantiate(sphere, point, Quaternion.identity);
+		newSphere.transform.localScale = Vector3.one * splashRange;
+		Destroy(newSphere, 1f);
 	}
 }

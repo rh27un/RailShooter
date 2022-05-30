@@ -16,7 +16,8 @@ MonoBehaviour:
     type: 3}
   projectilePrefab: {fileID: 3101643855038421271, guid: 6912d30e45677f74fb0e814a66c2cf58,
     type: 3}
-  maxAmmo: 100
+  maxAmmo: 1
+  infiniteAmmo: 0
   curAmmo: 90
   storedAmmo: 0
   multiShot: 1
@@ -25,7 +26,7 @@ MonoBehaviour:
   range: 0
   damage: 200
   splash: 1
-  splashRange: 5
+  splashRange: 10
   fireDamage: 0
   fireTime: 0
   recoil: 30
