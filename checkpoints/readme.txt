@@ -1,0 +1,1 @@
+copy the file you want to load in the game directory and rename it to 'checkpoint.dat'

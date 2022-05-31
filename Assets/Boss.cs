@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
-	public Animator animator;
+	protected Health health;
+	protected HUDManager manager;
+	public void Awake()
+	{
+		manager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
+		health = gameObject.GetComponent<Health>();
+		manager.StartBossFight(gameObject.name);
+	}
 
 	private void Update()
 	{
-		Debug.Log(animator.GetCurrentAnimatorStateInfo(0));
+		manager.SetBossHealth(health.CurHealth / health.maxHealth);
 	}
 }

@@ -33,6 +33,13 @@ public class HUDManager : MonoBehaviour
 	[SerializeField]
 	protected float fadeTime;
 
+	[SerializeField]
+	protected GameObject bossPanel;
+	[SerializeField]
+	protected TextMeshProUGUI bossText;
+	[SerializeField]
+	protected Image bossBar;
+
 	//public bool IsFirstToLoad { get; set; }
 
 	private void Awake()
@@ -138,5 +145,22 @@ public class HUDManager : MonoBehaviour
 	public void SetScoreText(float score)
 	{
 		scoreText.text = score.ToString("N0");
+	}
+
+	public void StartBossFight(string bossName)
+	{
+		bossPanel.SetActive(true);
+		bossText.text = bossName;
+		bossBar.fillAmount = 1f;
+	}
+
+	public void SetBossHealth(float health)
+	{
+		bossBar.fillAmount = health;
+	}
+
+	public void EndBossFight()
+	{
+		bossPanel.SetActive(false);
 	}
 }
