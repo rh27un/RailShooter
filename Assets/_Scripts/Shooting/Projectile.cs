@@ -57,14 +57,14 @@ public class Projectile : MonoBehaviour
 			if (c.GetComponent<Health>())
 			{
 				Vector3 distance = transform.position - c.transform.position;
-				var damageDealt = damage * (splashRange / distance.magnitude);
+				var damageDealt = (-distance.magnitude + splashRange) / splashRange * damage;
 				Debug.Log("Dealt " + damageDealt + " damage");
 				c.GetComponent<Health>().Damage(damageDealt);
 			}
 			else if (c.GetComponent<Hitbox>())
 			{
 				Vector3 distance = transform.position - c.transform.position;
-				var damageDealt = damage * (splashRange / distance.magnitude);
+				var damageDealt = (-distance.magnitude + splashRange) / splashRange * damage;
 				Debug.Log("Dealt " + damageDealt + " damage");
 				c.GetComponent<Hitbox>().Damage(damageDealt);
 			}
@@ -75,7 +75,7 @@ public class Projectile : MonoBehaviour
 		Destroy(gameObject);
 		Instantiate(explosion, point, Quaternion.identity);
 		var newSphere = Instantiate(sphere, point, Quaternion.identity);
-		newSphere.transform.localScale = Vector3.one * splashRange;
+		newSphere.transform.localScale = Vector3.one * splashRange * 2;
 		Destroy(newSphere, 1f);
 	}
 }

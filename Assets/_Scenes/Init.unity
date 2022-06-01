@@ -17688,7 +17688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754a91f7d3d7f24408be95e832386880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000000
+  maxHealth: 100
   enemyType: 
   hUDManager: {fileID: 1978426576}
   hurtColor: {r: 1, g: 0, b: 0, a: 0.46666667}

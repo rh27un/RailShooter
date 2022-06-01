@@ -107,6 +107,8 @@ public class Enemy : MonoBehaviour
 
 	public void DropWeapon()
 	{
+		if (stats.gun.infiniteAmmo)
+			return;
 		Gun gun = stats.gun;
 		GameObject newObject = Instantiate(gun.gunPrefab, transform.position, Quaternion.identity);
 		SphereCollider pickupCollider = newObject.AddComponent<SphereCollider>();

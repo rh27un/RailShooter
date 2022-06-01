@@ -42,8 +42,8 @@ public class BossShoot : StateMachineBehaviour
 			}
 			var timeToPlayer = distanceToPlayer / (stats[i].projectileSpeed * predictMod);
 			var predictedPosition = player.position + (playerController.velocity * timeToPlayer);
-			//if (predictedPosition.y < t.position.y)
-			//	predictedPosition.y = t.position.y;
+			if (predictedPosition.y < 1f)
+				predictedPosition.y = 1f;
 			if (canSee)
 			{
 				if (Time.time > lastFires[i] + (stats[i].fireRate))
