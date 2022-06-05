@@ -30,6 +30,29 @@ public class TrainController : MonoBehaviour {
 
 	protected GameObject terrain;
 
+	protected float bossTimeStart;
+	protected float bossTime;
+	protected bool isBoss;
+	public void StartBossTimer(float time)
+	{
+		bossTimeStart = distance;
+		bossTime = time;
+		isBoss = true;
+	}
+	public float BossTimer()
+	{
+		return (Time.time - bossTimeStart) / bossTime;
+	}
+	public void EndBossTimer()
+	{
+		isBoss = false;
+	}
+
+	void FailBoss()
+	{
+		GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().LoseBoss();
+		isBoss = false;
+	}
 	void updateTestText()
 	{
 		string text = string.Empty;
@@ -71,6 +94,10 @@ public class TrainController : MonoBehaviour {
 			curSpeed = Mathf.Clamp(curSpeed - acceleration * Time.deltaTime, speed, curSpeed);
 		}
 		distance += curSpeed * Time.deltaTime;
+		if(distance > bossTimeStart + bossTime && isBoss)
+		{
+			FailBoss();
+		}
 
 		if(distance > lastSpawn + enemySpawnDistance)
 		{

@@ -96,6 +96,18 @@ public class PlayerHealth : Health
 			Die();
 		}
 	}
+	public void Heal(float _health, bool _cheat = false)
+	{
+		if (!_cheat)
+		{
+			Heal(_health);
+			hUDManager.SetHealthText(_health);
+		} else
+		{
+			curHealth += _health;
+			hUDManager.SetHealthText(_health);
+		}
+	}
 
 	public override void Die()
 	{
@@ -106,6 +118,24 @@ public class PlayerHealth : Health
 		StopCoroutine("BeInvincible");
 	}
 
+	public void LoseBoss()
+	{
+		if (isDying)
+			return;
+		hUDManager.SetColor(Color.black);
+		StartCoroutine("LoseSlowly");
+		StopCoroutine("BeInvincible");
+	}
+	protected IEnumerator LoseSlowly()
+	{
+		isDying = true;
+		GetComponent<FPSCharacter>().enabled = false;
+		yield return new WaitForSeconds(1f);
+		continueTime = Time.time;
+		canContinue = true;
+		hUDManager.ShowContinueScreen();
+		hUDManager.SetContinueAmount(continues);
+	}
 	protected IEnumerator DieSlowly()
 	{
 		lives--;
