@@ -16,7 +16,9 @@ MonoBehaviour:
     type: 3}
   projectilePrefab: {fileID: 0}
   maxAmmo: 10
+  infiniteAmmo: 0
   curAmmo: 4
+  storedAmmo: 0
   multiShot: 1
   fireRate: 1
   reloadTime: 2
@@ -28,7 +30,7 @@ MonoBehaviour:
   fireTime: 0
   recoil: 20
   aimedRecoil: 0
-  inaccuracy: 0
+  inaccuracy: 0.7
   aimedFOV: 60
   projectile: 0
   projectileSpeed: 0

@@ -40,6 +40,35 @@ public class HUDManager : MonoBehaviour
 	[SerializeField]
 	protected Image bossBar;
 
+	[SerializeField]
+	protected GameObject reloadBG;
+	[SerializeField]
+	protected Image reloadBar;
+	protected float reloadStart;
+	protected float reloadEnd;
+	protected bool isReloading;
+
+	[SerializeField]
+	protected GameObject chargeBG;
+	[SerializeField]
+	protected Image chargeBG2;
+	[SerializeField]
+	protected Image chargeBar;
+	protected float chargeStart;
+	protected float chargeEnd;
+	protected bool isCharging;
+
+	[SerializeField]
+	protected float inaccuracyMod;
+	[SerializeField]
+	protected RectTransform upCross;
+	[SerializeField]
+	protected RectTransform downCross;
+	[SerializeField]
+	protected RectTransform leftCross;
+	[SerializeField]
+	protected RectTransform rightCross;
+
 	//public bool IsFirstToLoad { get; set; }
 
 	private void Awake()
@@ -52,8 +81,61 @@ public class HUDManager : MonoBehaviour
 		{
 			fadeImage.color = Color.Lerp(fadeImage.color, targetColor, fadeTime);
 		}
+
+		if (isReloading)
+		{
+			float t = (Time.time - reloadStart) / (reloadEnd - reloadStart);
+			if (t <= 1)
+			{
+				reloadBar.fillAmount = t;
+			} else
+			{
+				isReloading = false;
+				reloadBG.SetActive(false);
+			}
+		}
+		if (isCharging)
+		{
+			float t = (Time.time - chargeStart) / (chargeEnd - chargeStart);
+			if (t <= 1)
+			{
+				chargeBar.fillAmount = t;
+			}
+			else
+			{
+				isCharging = false;
+				chargeBG.SetActive(false);
+			}
+		}
+
 	}
 
+	public void StartReload(float _reloadTime)
+	{
+		reloadBG.SetActive(true);
+		reloadStart = Time.time;
+		reloadEnd = Time.time + _reloadTime;
+		isReloading = true;
+	}
+	public void EndReload()
+	{
+		reloadBG.SetActive(false);
+		isReloading = false;
+	}
+
+	public void StartCharge(float _chargeMin, float _chargeMax)
+	{
+		chargeBG.SetActive(true);
+		chargeStart = Time.time;
+		chargeEnd = Time.time + _chargeMax;
+		chargeBG2.fillAmount = _chargeMin / _chargeMax;
+		isCharging = true;
+	}
+	public void EndCharge()
+	{
+		chargeBG.SetActive(false);
+		isCharging = false;
+	}
 	public void SetColor(Color _targetColor)
 	{
 		targetColor = _targetColor;
@@ -62,6 +144,15 @@ public class HUDManager : MonoBehaviour
 	{
 		fadeImage.color = _currentColor;
 		targetColor = _targetColor;
+	}
+
+	public void SetInaccuracy(float _inaccuracy)
+	{
+		float modI = _inaccuracy * inaccuracyMod;
+		upCross.anchoredPosition = new Vector2(0f, modI);
+		downCross.anchoredPosition = new Vector2(0f, -modI);
+		leftCross.anchoredPosition = new Vector2(-modI, 0f);
+		rightCross.anchoredPosition = new Vector2(modI, 0f);
 	}
 
 	//void OnSceneLoaded(Scene scene, LoadSceneMode mode)

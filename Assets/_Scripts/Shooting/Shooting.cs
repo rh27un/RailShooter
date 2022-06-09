@@ -241,7 +241,7 @@ public class Shooting : MonoBehaviour
 				{
 					if (Time.time > lastFire + gun.fireRate)
 					{
-						Debug.Log("Imma chargin' my " + gun.name);
+						hUDManager.StartCharge(gun.minChargeTime, gun.maxChargeTime);
 						charging = true;
 						chargeStart = Time.time;
 					}
@@ -251,10 +251,11 @@ public class Shooting : MonoBehaviour
 	}
 	IEnumerator Reload()
 	{
-		Debug.Log("Reloading!");
+		//Debug.Log("Reloading!");
 		reloading = true;
+		hUDManager.StartReload(gun.reloadTime);
 		yield return new WaitForSeconds(gun.reloadTime);
-		Debug.Log("Done!");
+		//Debug.Log("Done!");
 		if (!gun.infiniteAmmo)
 		{
 			if (gun.storedAmmo > (gun.maxAmmo - gun.curAmmo))
@@ -288,6 +289,7 @@ public class Shooting : MonoBehaviour
 	}
 	void ChargeFire(float _chargeTime)
 	{
+		hUDManager.EndCharge();
 		if (_chargeTime >= gun.minChargeTime)
 		{
 			Debug.Log("Fired with " + _chargeTime + " seconds of charge");
@@ -421,6 +423,9 @@ public class Shooting : MonoBehaviour
 		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
 		hUDManager.SetGunText(gun.name);
 		hUDManager.SetAmmoText(gun.curAmmo, gun.storedAmmo);
+		hUDManager.EndReload();
+		hUDManager.EndCharge();
+		hUDManager.SetInaccuracy(gun.inaccuracy);
 	}
 
 	public void PickUpWeapon(Gun _gun)

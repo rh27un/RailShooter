@@ -30,7 +30,7 @@ MonoBehaviour:
   fireTime: 0
   recoil: 0.05
   aimedRecoil: 0
-  inaccuracy: 0
+  inaccuracy: 0.5
   aimedFOV: 60
   projectile: 0
   projectileSpeed: 0
