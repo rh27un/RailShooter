@@ -27,6 +27,8 @@ public class Gun : ScriptableObject
 	public float splashRange; //the range at which splash damage is applied in metres
 	public float fireDamage; //damage per second to victim
 	public float fireTime;
+	public bool penetrative; //does raycast penetrate enemies
+	public int penetrateAmount; //how many penetrations can the raycast handle
 
 	[Header("Recoil & Inaccuracy")]
 	public float recoil; //how much spread increases with fire
@@ -48,4 +50,5 @@ public class Gun : ScriptableObject
 	public bool recoilCharge; //charges recoil
 	public bool inaccuracyCharge; //charges inaccuracy
 	public bool fireDamageCharge; //charges fire damage   
+	public bool penetrateCharge; //charges penetration
 }

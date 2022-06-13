@@ -119,7 +119,7 @@ public class Shooting : MonoBehaviour
 				{
 					if (Time.time > lastFire + gun.fireRate)
 					{
-						Fire(gun.multiShot, gun.damage, gun.splashRange, gun.recoil, spread, gun.fireDamage, gun.range);
+						Fire(gun.multiShot, gun.damage, gun.splashRange, gun.recoil, spread, gun.fireDamage, gun.range, gun.penetrateAmount);
 						if (characterScript.aiming)
 						{
 							if (characterScript.moveType == MoveType.Crouching)
@@ -187,7 +187,8 @@ public class Shooting : MonoBehaviour
 				} else if (hit.collider.gameObject.GetComponent<Hitbox>())
 				{
 					Destroy(Instantiate(hitmarkerPrefab, hit.point, Quaternion.identity), 5f);
-					hit.collider.gameObject.GetComponent<Hitbox>().Damage(melee.damage);
+					HitInfo info = new HitInfo() { distance = 0f, isExplosion = false, source = "Melee" };
+					hit.collider.gameObject.GetComponent<Hitbox>().Damage(melee.damage, info);
 				}
 				else
 				{
@@ -323,7 +324,12 @@ public class Shooting : MonoBehaviour
 			{
 				fireDamage = _chargeTime / gun.maxChargeTime * gun.inaccuracy;
 			}
-			Fire(multiShot, damage, splashRange, recoil, inaccuracy, fireDamage, gun.range);
+			int penetration = gun.penetrateAmount;
+			if (gun.penetrateCharge)
+			{
+				penetration = Mathf.FloorToInt(_chargeTime / gun.maxChargeTime * gun.penetrateAmount);
+			}
+			Fire(multiShot, damage, splashRange, recoil, inaccuracy, fireDamage, gun.range, penetration);
 		}
 		else
 		{
@@ -331,7 +337,7 @@ public class Shooting : MonoBehaviour
 		}
 	}
 
-	protected void Fire(int _multiShot, float _damage, float _splashRange, float _recoil, float _spread, float _fireDamage, float _range)
+	protected void Fire(int _multiShot, float _damage, float _splashRange, float _recoil, float _spread, float _fireDamage, float _range, int _penetration)
 	{
 		lastFire = Time.time;
 		gun.curAmmo--;
@@ -344,7 +350,43 @@ public class Shooting : MonoBehaviour
 			for (int i = 0; i < _multiShot; i++)
 			{
 				RaycastHit hit;
-				if (Physics.Raycast(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy), out hit, _range, layermask))
+				if (gun.penetrative)
+				{
+					RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy), _range, layermask);
+					hits = hits.OrderBy(h => h.distance).ToArray();
+					for(int j = 0; j <= _penetration; j++)
+					{
+						if (j >= hits.Length)
+							break;
+						if (hits[j].collider.gameObject.GetComponent<Health>())
+						{
+							Destroy(Instantiate(hitmarkerPrefab, hits[j].point, Quaternion.identity), 5f);
+							hits[j].collider.gameObject.GetComponent<Health>().Damage(_damage);
+							if (_fireDamage > 0f)
+							{
+								Debug.Log("Setting Fire");
+								hits[j].collider.gameObject.GetComponent<Health>().SetFire(_fireDamage, gun.fireTime);
+							}
+						}
+						else if (hits[j].collider.gameObject.GetComponent<Hitbox>())
+						{
+							Destroy(Instantiate(hitmarkerPrefab, hits[j].point, Quaternion.identity), 5f);
+							HitInfo info = new HitInfo() { distance = hits[j].distance, source = gun.name, isExplosion = false };
+							hits[j].collider.gameObject.GetComponent<Hitbox>().Damage(_damage, info);
+							if (_fireDamage > 0f)
+							{
+								Debug.Log("Setting Fire");
+								hits[j].collider.gameObject.GetComponent<Hitbox>().SetFire(_fireDamage, gun.fireTime);
+							}
+						}
+						else
+						{
+							Destroy(Instantiate(missmarkerPrefab, hits[j].point, Quaternion.identity), 5f);
+							break;
+						}
+					}
+				} 
+				else if (Physics.Raycast(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy), out hit, _range, layermask))
 				{
 					//Debug.Log(hit.collider.gameObject);
 					if (hit.collider.gameObject.GetComponent<Health>())
@@ -360,7 +402,8 @@ public class Shooting : MonoBehaviour
 					else if (hit.collider.gameObject.GetComponent<Hitbox>())
 					{
 						Destroy(Instantiate(hitmarkerPrefab, hit.point, Quaternion.identity), 5f);
-						hit.collider.gameObject.GetComponent<Hitbox>().Damage(_damage);
+						HitInfo info = new HitInfo() {  distance = hit.distance, isExplosion = false, source = gun.name };
+						hit.collider.gameObject.GetComponent<Hitbox>().Damage(_damage, info);
 						if (_fireDamage > 0f)
 						{
 							Debug.Log("Setting Fire");
@@ -382,15 +425,15 @@ public class Shooting : MonoBehaviour
 				GameObject newProj = Instantiate(gun.projectilePrefab, gunLoc.position, gunLoc.rotation);
 				if (!gun.splash)
 				{
-					newProj.GetComponent<Projectile>().SetProperties(_damage);
+					newProj.GetComponent<Projectile>().SetProperties(_damage, gun.name, transform);
 				}
 				else if (gun.explodeOnImpact)
 				{
-					newProj.GetComponent<Projectile>().SetProperties(_damage, _splashRange);
+					newProj.GetComponent<Projectile>().SetProperties(_damage, _splashRange, gun.name, transform);
 				}
 				else
 				{
-					newProj.GetComponent<Projectile>().SetProperties(_damage, _splashRange, gun.explodeTimer);
+					newProj.GetComponent<Projectile>().SetProperties(_damage, _splashRange, gun.explodeTimer, gun.name, transform);
 				}
 				newProj.GetComponent<Rigidbody>().AddForce(RandomDirection(gunLoc, 0) * gun.projectileSpeed);
 			}

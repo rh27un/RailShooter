@@ -21,6 +21,7 @@ public class Health : MonoBehaviour
 
 	public string enemyType;
 
+	protected bool isDead;
 	void Start()
 	{
 		curHealth = maxHealth;
@@ -68,12 +69,13 @@ public class Health : MonoBehaviour
 			Die();
 		}
 	}
-	public void Damage(float _damage, string hitFrom)
+	public void Damage(float _damage, HitInfo _info)
 	{
 		curHealth -= _damage;
 		if(curHealth < 0f)
 		{
-			Die(hitFrom);
+			_info.target = gameObject.name.Replace(" Variant(Clone)", string.Empty);
+			Die(_info);
 		}
 	}
 	public void Heal(float _health)
@@ -83,19 +85,25 @@ public class Health : MonoBehaviour
 
 	public virtual void Die()
 	{
+		if (isDead)
+			return;
 		// TODO: Instantiate ragdoll, play sound
 		gameObject.GetComponent<Enemy>()?.DropWeapon();
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<Score>().ScoreType(ScoreType.Kill);
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<TrainController>().Die(enemyType);
 		Destroy(gameObject);
+		isDead = true;
 	}
 
-	public void Die(string hitFrom)
+	public void Die(HitInfo _info)
 	{
+		if (isDead)
+			return;
 		gameObject.GetComponent<Enemy>()?.DropWeapon();
-		GameObject.FindGameObjectWithTag("GameController").GetComponent<Score>().ScoreType(hitFrom == "head" ? ScoreType.HeadshotKill : ScoreType.Kill);
+		GameObject.FindGameObjectWithTag("GameController").GetComponent<Score>().ScoreInfo(_info);
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<TrainController>().Die(enemyType);
 		Destroy(gameObject);
+		isDead = true;
 	}
 
 }

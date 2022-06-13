@@ -69,11 +69,25 @@ public class HUDManager : MonoBehaviour
 	[SerializeField]
 	protected RectTransform rightCross;
 
+	protected RectTransform multiplierTransform;
+
+	protected bool animatingMultiplier;
+	protected Vector2 multiplierStartPos;
+	protected Vector2 multiplierEndPos;
+	protected Quaternion multiplierStartRot;
+	protected Quaternion multiplierEndRot;
+	protected Color multiplierStartColor;
+	protected Color multiplierEndColor;
+	protected float multiplierTimeScale = 1f;
+	protected float mutliplierAnimStart;
+	protected float tension;
 	//public bool IsFirstToLoad { get; set; }
 
 	private void Awake()
 	{
 		//SceneManager.sceneLoaded += OnSceneLoaded;
+		multiplierTransform = multiplierText.GetComponent<RectTransform>();
+		multiplierStartPos = multiplierTransform.anchoredPosition;
 	}
 	private void Update()
 	{
@@ -107,7 +121,56 @@ public class HUDManager : MonoBehaviour
 				chargeBG.SetActive(false);
 			}
 		}
+		if (animatingMultiplier)
+		{
+			float t = (Time.time - mutliplierAnimStart) / (multiplierTimeScale);
+			if(t <= 1)
+			{
+				multiplierTransform.anchoredPosition = Vector2.Lerp(multiplierStartPos, multiplierEndPos, t);
+				multiplierTransform.rotation = Quaternion.Lerp(multiplierStartRot, multiplierEndRot, t);
+				multiplierText.color = Color.Lerp(multiplierStartColor, multiplierEndColor, t);
+			} else
+			{
+				animatingMultiplier = false;
+				multiplierTransform.anchoredPosition = multiplierStartPos;
+				multiplierTransform.rotation = multiplierStartRot;
+				multiplierText.color = multiplierStartColor;
+				multiplierText.text = string.Empty;
+			}
+		} else
+		{
+			multiplierTransform.anchoredPosition = multiplierStartPos + (Random.insideUnitCircle * tension * 2f);
+			tension += Time.deltaTime;
+		}
+	}
+	
+	protected void CancelMultiplierAnimation()
+	{
+		if (animatingMultiplier)
+		{
+			multiplierTransform.anchoredPosition = multiplierStartPos;
+			multiplierTransform.rotation = multiplierStartRot;
+			multiplierText.color = multiplierStartColor;
+			animatingMultiplier = false;
+		}
+	}
 
+	protected void AnimateMultiplier()
+	{
+		if (animatingMultiplier)
+		{
+			multiplierTransform.anchoredPosition = multiplierStartPos;
+			multiplierTransform.rotation = multiplierStartRot;
+			multiplierText.color = multiplierStartColor;
+		}
+		multiplierStartPos = multiplierTransform.anchoredPosition;
+		multiplierStartRot = multiplierTransform.rotation;
+		multiplierEndRot = Quaternion.Euler(multiplierStartRot.eulerAngles + new Vector3(0f, 0f, Random.Range(-20f, 20f)));
+		multiplierEndPos = multiplierStartPos + new Vector2(Random.Range(-10f, 10f), Random.Range(-100f, -70f));
+		multiplierStartColor = multiplierText.color;
+		multiplierEndColor = new Color(1f, 1f, 1f, 0f);
+		mutliplierAnimStart = Time.time;
+		animatingMultiplier = true;
 	}
 
 	public void StartReload(float _reloadTime)
@@ -178,7 +241,7 @@ public class HUDManager : MonoBehaviour
 	}
 	public void SetHealthText(float value)
 	{
-		healthText.text = Mathf.Max(value, 0).ToString("N0");
+		healthText.text = Mathf.Max(value, 1).ToString("N0");
 	}
 
 	public void SetGunText(string value)
@@ -215,14 +278,16 @@ public class HUDManager : MonoBehaviour
 		continueTimerText.text = time.ToString();
 	}
 
-	public void SetMultiplierText(float multiplier)
+	public void SetMultiplierText(float multiplier, float _tension)
 	{
+		tension = _tension;
 		if (multiplier > 1f)
 		{
+			CancelMultiplierAnimation();
 			multiplierText.text = $"x{multiplier:N2}";
 		} else
 		{
-			multiplierText.text = string.Empty;
+			AnimateMultiplier();
 		}
 	}
 	public void UpdateNewScoresText(List<string> newScores)
