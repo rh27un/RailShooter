@@ -25,8 +25,12 @@ public class Shooting : MonoBehaviour
 	protected float chargeStart;
 	[SerializeField]
 	protected float spread;
+	[SerializeField]
+	protected float spreadDecay = 0.1f;
+	[SerializeField]
+	protected float spreadMod;
 	protected int layermask = 1 << 10 | 1 << 11;
-	public Gun melee;   // Yes melee is a gun, deal with it
+	public Gun melee;  
 	public string gunsToLoad;
 	protected Pause pause;
 	void Start()
@@ -158,7 +162,7 @@ public class Shooting : MonoBehaviour
 									break;
 							}
 						}
-						characterScript.Recoil(gun.recoil);
+						//characterScript.Recoil(gun.recoil);
 					}
 				} 
 				else if(Input.GetButtonDown("Fire1") && !reloading)
@@ -199,7 +203,6 @@ public class Shooting : MonoBehaviour
 		}
 		else
 		{
-			spread = Mathf.Clamp(spread * 0.5f, gun.inaccuracy, spread);
 			if (Input.GetButtonDown("Reload") && !reloading)
 			{
 				if (gun.storedAmmo > 0)
@@ -249,6 +252,8 @@ public class Shooting : MonoBehaviour
 				}
 			}
 		}
+		spread = Mathf.Max(spread * spreadDecay, 0f);
+		hUDManager.SetInaccuracy(gun.inaccuracy + spread);
 	}
 	IEnumerator Reload()
 	{
@@ -283,7 +288,7 @@ public class Shooting : MonoBehaviour
 	}
 	Vector3 RandomDirection(Transform _t, float _inaccuracy)
 	{
-		Vector3 newDir = Random.insideUnitCircle * _inaccuracy;
+		Vector3 newDir = Random.insideUnitCircle * (_inaccuracy) * spreadMod;
 		newDir.z = 20f;
 		//newDir.y += _inaccuracy;
 		return _t.TransformDirection(newDir.normalized);
@@ -343,7 +348,6 @@ public class Shooting : MonoBehaviour
 		gun.curAmmo--;
 		hUDManager.SetAmmoText(gun.curAmmo, gun.storedAmmo);
 		gunObjects[gunIndex].GetComponent<Animation>().Play();
-
 		if (!gun.projectile)
 		{
 			//raycast
@@ -352,7 +356,7 @@ public class Shooting : MonoBehaviour
 				RaycastHit hit;
 				if (gun.penetrative)
 				{
-					RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy), _range, layermask);
+					RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy + spread), _range, layermask);
 					hits = hits.OrderBy(h => h.distance).ToArray();
 					for(int j = 0; j <= _penetration; j++)
 					{
@@ -386,7 +390,7 @@ public class Shooting : MonoBehaviour
 						}
 					}
 				} 
-				else if (Physics.Raycast(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy), out hit, _range, layermask))
+				else if (Physics.Raycast(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy + spread), out hit, _range, layermask))
 				{
 					//Debug.Log(hit.collider.gameObject);
 					if (hit.collider.gameObject.GetComponent<Health>())
@@ -461,7 +465,7 @@ public class Shooting : MonoBehaviour
 		gunLoc = gunObjects[gunIndex].transform;
 		//gun.curAmmo = gun.maxAmmo;
 		isCharger = (gun.damageCharge || gun.fireDamageCharge || gun.inaccuracyCharge || gun.multiShotCharge || gun.recoilCharge || gun.splashRangeCharge);
-		spread = gun.inaccuracy;
+		spread = 0f;
 		projectilePrefab = gun.projectilePrefab;
 		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
 		hUDManager.SetGunText(gun.name);
@@ -503,7 +507,7 @@ public class Shooting : MonoBehaviour
 			gunLoc = gunObjects[gunIndex].transform;
 
 			isCharger = (gun.damageCharge || gun.fireDamageCharge || gun.inaccuracyCharge || gun.multiShotCharge || gun.recoilCharge || gun.splashRangeCharge);
-			spread = gun.inaccuracy;
+			spread = 0f;
 
 			characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
 			hUDManager.SetGunText(gun.name);
@@ -524,7 +528,7 @@ public class Shooting : MonoBehaviour
 		gun = guns[gunIndex];
 
 		isCharger = (gun.damageCharge || gun.fireDamageCharge || gun.inaccuracyCharge || gun.multiShotCharge || gun.recoilCharge || gun.splashRangeCharge);
-		spread = gun.inaccuracy;
+		spread = 0f;
 
 		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
 		hUDManager.SetGunText(gun.name);

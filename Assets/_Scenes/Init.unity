@@ -7713,6 +7713,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7005634783304936941, guid: 44cc1ee0225dd074b9d5c23d880b7c4e,
         type: 3}
+    - target: {fileID: 2530319763274330074, guid: aa0e83511b471b84780d5ba12f0679c6,
+        type: 3}
+      propertyPath: spreadDecay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530319763274330074, guid: aa0e83511b471b84780d5ba12f0679c6,
+        type: 3}
+      propertyPath: spreadMod
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5052513705393840842, guid: aa0e83511b471b84780d5ba12f0679c6,
         type: 3}
       propertyPath: m_Layer
