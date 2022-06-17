@@ -252,8 +252,15 @@ public class Shooting : MonoBehaviour
 				}
 			}
 		}
-		spread = Mathf.Max(spread * spreadDecay, 0f);
-		hUDManager.SetInaccuracy(gun.inaccuracy + spread);
+		spread = Mathf.Max(spread - (gun.recoilDecay * Time.deltaTime), 0f);
+		if (characterScript.aiming)
+		{
+			hUDManager.SetInaccuracy(gun.aimedInaccuracy + spread);
+		}
+		else
+		{
+			hUDManager.SetInaccuracy(gun.inaccuracy + spread);
+		}
 	}
 	IEnumerator Reload()
 	{
@@ -356,7 +363,7 @@ public class Shooting : MonoBehaviour
 				RaycastHit hit;
 				if (gun.penetrative)
 				{
-					RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy + spread), _range, layermask);
+					RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, RandomDirection(Camera.main.transform, (characterScript.aiming ? gun.aimedInaccuracy : gun.inaccuracy) + spread), _range, layermask);
 					hits = hits.OrderBy(h => h.distance).ToArray();
 					for(int j = 0; j <= _penetration; j++)
 					{
@@ -390,7 +397,7 @@ public class Shooting : MonoBehaviour
 						}
 					}
 				} 
-				else if (Physics.Raycast(Camera.main.transform.position, RandomDirection(Camera.main.transform, gun.inaccuracy + spread), out hit, _range, layermask))
+				else if (Physics.Raycast(Camera.main.transform.position, RandomDirection(Camera.main.transform, (characterScript.aiming ? gun.aimedInaccuracy : gun.inaccuracy) + spread), out hit, _range, layermask))
 				{
 					//Debug.Log(hit.collider.gameObject);
 					if (hit.collider.gameObject.GetComponent<Health>())

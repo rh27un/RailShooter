@@ -7716,7 +7716,7 @@ PrefabInstance:
     - target: {fileID: 2530319763274330074, guid: aa0e83511b471b84780d5ba12f0679c6,
         type: 3}
       propertyPath: spreadDecay
-      value: 0.5
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 2530319763274330074, guid: aa0e83511b471b84780d5ba12f0679c6,
         type: 3}

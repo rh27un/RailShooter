@@ -28,10 +28,14 @@ MonoBehaviour:
   splashRange: 0
   fireDamage: 0
   fireTime: 0
-  recoil: 0.05
-  aimedRecoil: 0
-  inaccuracy: 0.5
+  penetrative: 0
+  penetrateAmount: 0
+  recoil: 1
+  aimedRecoil: 1
+  inaccuracy: 1
+  aimedInaccuracy: 0
   aimedFOV: 60
+  recoilDecay: 2
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0
@@ -44,3 +48,4 @@ MonoBehaviour:
   recoilCharge: 0
   inaccuracyCharge: 0
   fireDamageCharge: 0
+  penetrateCharge: 0

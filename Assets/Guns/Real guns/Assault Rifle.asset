@@ -30,10 +30,12 @@ MonoBehaviour:
   fireTime: 0
   penetrative: 0
   penetrateAmount: 0
-  recoil: 10
+  recoil: 0.2
   aimedRecoil: 0.1
   inaccuracy: 1
+  aimedInaccuracy: 0.3
   aimedFOV: 60
+  recoilDecay: 3
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0

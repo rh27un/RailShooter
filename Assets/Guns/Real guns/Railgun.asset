@@ -33,7 +33,9 @@ MonoBehaviour:
   recoil: 20
   aimedRecoil: 0
   inaccuracy: 0.7
+  aimedInaccuracy: 0
   aimedFOV: 60
+  recoilDecay: 1
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0

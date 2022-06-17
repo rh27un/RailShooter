@@ -34,7 +34,10 @@ public class Gun : ScriptableObject
 	public float recoil; //how much spread increases with fire
 	public float aimedRecoil;
 	public float inaccuracy;
+	public float aimedInaccuracy;
 	public float aimedFOV;
+	public float recoilDecay;
+
 	[Header("Projectile")]
 	public bool projectile; //fires a projectile if true, uses raycast if false
 	public float projectileSpeed; //speed at which projectile is fired in m/s
