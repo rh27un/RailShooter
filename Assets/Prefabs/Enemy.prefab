@@ -112,15 +112,21 @@ MonoBehaviour:
   player: {fileID: 0}
   playerController: {fileID: 0}
   startHealth: 1e+19
-  firerateModifier: 3
-  stateSwitchTime: 2
-  preferredPlayerDistance: 10
-  projectilePrefab: {fileID: 1151707096860337847, guid: 955f953a2305e6142afd0222f7771a38,
-    type: 3}
-  projectileSpeed: -900
   aimMarkerPrefab: {fileID: 1151707096860337847, guid: 91c0c72927e73db4dbec74c6a7c78836,
     type: 3}
   predictMod: 0.021
+  healthPickup: {fileID: 7015718990984693529, guid: dd4a468962891db4991e2873547aebd1,
+    type: 3}
+  overhealPickup: {fileID: 7015718990984693529, guid: 49e8248a2122a2349b6444fd095aaf4a,
+    type: 3}
+  extraDamagePickup: {fileID: 7015718990984693529, guid: 9f469b8c313e7ae4c872fae1d64bda25,
+    type: 3}
+  bonusPointsPickup: {fileID: 7015718990984693529, guid: 7af281c0db70ee24daa5f8ef8100bca8,
+    type: 3}
+  magnetPickup: {fileID: 7015718990984693529, guid: fa2833c5d81c31446aee13ee4bd123dc,
+    type: 3}
+  bottomlessClipPickup: {fileID: 7015718990984693529, guid: 3f0214243449afc489a5b7d1ac346cab,
+    type: 3}
 --- !u!23 &1749288578818651430
 MeshRenderer:
   m_ObjectHideFlags: 0

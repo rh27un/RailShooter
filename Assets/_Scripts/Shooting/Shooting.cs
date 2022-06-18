@@ -33,6 +33,8 @@ public class Shooting : MonoBehaviour
 	public Gun melee;  
 	public string gunsToLoad;
 	protected Pause pause;
+	protected bool bottomlessClip;
+	protected float extraDamageMod = 1f;
 	void Start()
 	{
 		SceneManager.sceneLoaded += OnSceneLoaded;
@@ -123,7 +125,7 @@ public class Shooting : MonoBehaviour
 				{
 					if (Time.time > lastFire + gun.fireRate)
 					{
-						Fire(gun.multiShot, gun.damage, gun.splashRange, gun.recoil, spread, gun.fireDamage, gun.range, gun.penetrateAmount);
+						Fire(gun.multiShot, gun.damage * extraDamageMod, gun.splashRange, gun.recoil, spread, gun.fireDamage, gun.range, gun.penetrateAmount);
 						if (characterScript.aiming)
 						{
 							if (characterScript.moveType == MoveType.Crouching)
@@ -341,7 +343,7 @@ public class Shooting : MonoBehaviour
 			{
 				penetration = Mathf.FloorToInt(_chargeTime / gun.maxChargeTime * gun.penetrateAmount);
 			}
-			Fire(multiShot, damage, splashRange, recoil, inaccuracy, fireDamage, gun.range, penetration);
+			Fire(multiShot, damage * extraDamageMod, splashRange, recoil, inaccuracy, fireDamage, gun.range, penetration);
 		}
 		else
 		{
@@ -352,7 +354,8 @@ public class Shooting : MonoBehaviour
 	protected void Fire(int _multiShot, float _damage, float _splashRange, float _recoil, float _spread, float _fireDamage, float _range, int _penetration)
 	{
 		lastFire = Time.time;
-		gun.curAmmo--;
+		if(!bottomlessClip)
+			gun.curAmmo--;
 		hUDManager.SetAmmoText(gun.curAmmo, gun.storedAmmo);
 		gunObjects[gunIndex].GetComponent<Animation>().Play();
 		if (!gun.projectile)
@@ -545,5 +548,27 @@ public class Shooting : MonoBehaviour
 	{
 		guns.Clear();
 		gunObjects.Clear();
+	}
+	protected IEnumerator BottomlessClipSlowly(float time)
+	{
+		bottomlessClip = true;
+		yield return new WaitForSeconds(time);
+		bottomlessClip = false;
+	}
+	public void BottomlessClip(float time)
+	{
+		StartCoroutine(BottomlessClipSlowly(time));
+	}
+
+	protected IEnumerator ExtraDamageSlowly(float time)
+	{
+		yield return new WaitForSeconds(time);
+		extraDamageMod = 1f;
+	}
+
+	public void ExtraDamage(float dmg, float time)
+	{
+		extraDamageMod = dmg;
+		StartCoroutine(ExtraDamageSlowly(time));
 	}
 }

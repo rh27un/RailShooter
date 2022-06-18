@@ -100,13 +100,14 @@ public class PlayerHealth : Health
 	{
 		if (!_cheat)
 		{
-			Heal(_health);
-			hUDManager.SetHealthText(_health);
+			curHealth = Mathf.Min(curHealth + _health, maxHealth);
+			hUDManager.SetHealthText(curHealth);
 		} else
 		{
 			curHealth += _health;
-			hUDManager.SetHealthText(_health);
+			hUDManager.SetHealthText(curHealth);
 		}
+		hUDManager.SetColor(Color.green, Color.clear);
 	}
 
 	public override void Die()

@@ -17,4 +17,13 @@ public class EnemyStats : ScriptableObject
 	public float fireRate;
 	public float damage;
 	public GameObject projectilePrefab;
+	[Range(0f, 1f)]
+	public float baseDropRate; //Chance out of 1 enemy will drop any powerup
+	//Drop weights for each powerup
+	public float baseHealthDropRate;
+	public float baseOverhealDropRate;
+	public float baseExtraDamageDropRate;
+	public float baseBonusPointsDropRate;
+	public float baseMagnetDropRate;
+	public float baseBottomlessClipDropRate;
 }

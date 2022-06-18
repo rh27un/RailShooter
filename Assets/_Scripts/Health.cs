@@ -88,7 +88,7 @@ public class Health : MonoBehaviour
 		if (isDead)
 			return;
 		// TODO: Instantiate ragdoll, play sound
-		gameObject.GetComponent<Enemy>()?.DropWeapon();
+		gameObject.GetComponent<Enemy>()?.Drops();
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<Score>().ScoreType(ScoreType.Kill);
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<TrainController>().Die(enemyType);
 		Destroy(gameObject);
@@ -99,7 +99,7 @@ public class Health : MonoBehaviour
 	{
 		if (isDead)
 			return;
-		gameObject.GetComponent<Enemy>()?.DropWeapon();
+		gameObject.GetComponent<Enemy>()?.Drops();
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<Score>().ScoreInfo(_info);
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<TrainController>().Die(enemyType);
 		Destroy(gameObject);

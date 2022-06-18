@@ -42,9 +42,9 @@ public class Score : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if(Time.time > lastScore + multiplierDecayDelay)
+		if(Time.time > lastScore + (multiplierDecayDelay))
 		{
-			multiplier = Mathf.Max(1f, multiplier - (multiplierDecay * Time.deltaTime));
+			multiplier = Mathf.Max(1f, multiplier - (multiplierDecay * multiplier * Time.deltaTime));
 			if (toggle)
 			{
 				hUDManager.SetMultiplierText(multiplier, Time.time - lastScore);
@@ -97,7 +97,7 @@ public class Score : MonoBehaviour
 		switch (info.targetHitbox)
 		{
 			case "head":
-				if (info.source != "Melee")
+				if (info.source != "Melee" && !info.isExplosion)
 				{
 					scoreText += " - Headshot";
 					points += 50f;
@@ -154,9 +154,18 @@ public class Score : MonoBehaviour
 		hUDManager.SetScoreText(score);
 		toggle = true;
 	}
-	public void ScorePoints(float points)
+	public void ScorePoints(float points, string message, float _multiplierIncrement)
 	{
-
+		lastScore = Time.time;
+		var pointsToAdd = points * multiplier;
+		newScores.Add(message + (points > 0f ? "+" + pointsToAdd.ToString() : string.Empty));
+		hUDManager.UpdateNewScoresText(newScores);
+		StartCoroutine("RemoveNewScore");
+		multiplier += _multiplierIncrement;
+		hUDManager.SetMultiplierText(multiplier, 0f);
+		score += pointsToAdd;
+		hUDManager.SetScoreText(score);
+		toggle = true;
 	}
 	IEnumerator RemoveNewScore()
 	{

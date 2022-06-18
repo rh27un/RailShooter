@@ -25,3 +25,10 @@ MonoBehaviour:
   damage: 60
   projectilePrefab: {fileID: 3048023752854843039, guid: 91151c3358b8b864fa88563f27c024c8,
     type: 3}
+  baseDropRate: 0.094
+  baseHealthDropRate: 1
+  baseOverhealDropRate: 2
+  baseExtraDamageDropRate: 1
+  baseBonusPointsDropRate: 1
+  baseMagnetDropRate: 0
+  baseBottomlessClipDropRate: 0.7

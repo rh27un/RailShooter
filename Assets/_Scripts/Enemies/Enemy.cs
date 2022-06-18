@@ -28,6 +28,18 @@ public class Enemy : MonoBehaviour
 	[SerializeField]
 	protected float predictMod;
 
+	[SerializeField]
+	protected GameObject healthPickup;
+	[SerializeField]
+	protected GameObject overhealPickup;
+	[SerializeField]
+	protected GameObject extraDamagePickup;
+	[SerializeField]
+	protected GameObject bonusPointsPickup;
+	[SerializeField]
+	protected GameObject magnetPickup;
+	[SerializeField]
+	protected GameObject bottomlessClipPickup;
 	void Awake()
 	{
 		health = gameObject.AddComponent<Health>();
@@ -103,6 +115,48 @@ public class Enemy : MonoBehaviour
 		}
 		curState = curState == EnemyState.NotShooting ? EnemyState.Shooting : EnemyState.NotShooting;
 		StartCoroutine("SwitchStates");
+	}
+
+	public void DropPickup()
+	{
+		if (Random.value < stats.baseDropRate)
+		{
+			// modify chances of a health drop by how much a player needs it (ie player at 100% will never need healing so don't drop any)
+			var healthMod = Mathf.Clamp01(1 - (player.GetComponent<Health>().CurHealth / player.GetComponent<Health>().maxHealth));
+			var healthRate = healthMod * stats.baseHealthDropRate;
+			var overhealRate = healthMod * stats.baseOverhealDropRate;
+			var max = healthRate + overhealRate + stats.baseExtraDamageDropRate + stats.baseBonusPointsDropRate + stats.baseMagnetDropRate + stats.baseBottomlessClipDropRate;
+			var val = Random.Range(0f, max);
+			if(val < healthRate)
+			{
+				Instantiate(healthPickup, transform.position, Quaternion.identity);
+			} else if(val < overhealRate + healthRate)
+			{
+				Instantiate(overhealPickup, transform.position, Quaternion.identity);
+			} else if(val < stats.baseExtraDamageDropRate + overhealRate + healthRate)
+			{
+				Instantiate(extraDamagePickup, transform.position, Quaternion.identity);
+
+			} else if(val < stats.baseBonusPointsDropRate + stats.baseExtraDamageDropRate + overhealRate + healthRate)
+			{
+				Instantiate(bonusPointsPickup, transform.position, Quaternion.identity);
+
+			} else if(val < stats.baseMagnetDropRate + stats.baseBonusPointsDropRate + stats.baseExtraDamageDropRate + overhealRate + healthRate)
+			{
+				Instantiate(magnetPickup, transform.position, Quaternion.identity);
+
+			} else // bottomless clip
+			{
+				Instantiate(bottomlessClipPickup, transform.position, Quaternion.identity);
+
+			}
+		}
+	}
+
+	public void Drops()
+	{
+		DropWeapon();
+		DropPickup();
 	}
 
 	public void DropWeapon()
