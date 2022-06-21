@@ -10,7 +10,8 @@ public class FPSCharacter : MonoBehaviour
 {
 
 	public bool dontDestroyOnLoad = false;
-	public float killPlane;
+	public float yKillPlane;
+	public float xKillPlane;
 	//movement properties
 	[Header("Speed Properties")]
 	public float speed = 3f;
@@ -36,6 +37,7 @@ public class FPSCharacter : MonoBehaviour
 	public bool strafeLean = false;
 	public float strafeLeanSpeed = 1f;
 	public float strafeLeanAmount = 1f;
+	public float trainFriction = 0.5f;
 
 	//FOV properties
 	[Header("FOV Properties")]
@@ -73,7 +75,8 @@ public class FPSCharacter : MonoBehaviour
 	protected Transform cameraTransform;
 	protected float curSpeed;
 	protected float curLean;
-
+	protected Vector3 curTrainFriction;
+	protected TrainController train;
 	protected bool IsGrounded => controller.isGrounded;
 
 	protected Pause pause;
@@ -104,7 +107,7 @@ public class FPSCharacter : MonoBehaviour
 		}
 
 		pause = GameObject.FindGameObjectWithTag("GameController").GetComponent<Pause>();
-
+		train = pause.GetComponent<TrainController>();
 		//var options = GameObject.Find("Options").GetComponent<Options>();
 
 		walkFOV = PlayerPrefs.GetFloat("FieldOfView");
@@ -120,7 +123,11 @@ public class FPSCharacter : MonoBehaviour
 		controller.Move(CharacterMove() * Time.deltaTime);
 		if(!pause.isPause)
 			CameraLook();
-		if(transform.position.y <= killPlane)
+		if(transform.position.y <= yKillPlane)
+		{
+			GetComponent<PlayerHealth>().Die();
+		}
+		if(transform.position.x >= xKillPlane)
 		{
 			GetComponent<PlayerHealth>().Die();
 		}
@@ -128,6 +135,19 @@ public class FPSCharacter : MonoBehaviour
 
 	Vector3 CharacterMove()
 	{
+		RaycastHit floorHit;
+		if(Physics.Raycast(transform.position, Vector3.down, out floorHit, 1.1f))
+		{
+			if(floorHit.collider.tag == "Train")
+			{
+				curTrainFriction = Vector3.zero;
+			}
+			else
+			{
+				
+				curTrainFriction.x = Mathf.Clamp(curTrainFriction.x + trainFriction * train.GetCurSpeed() * Time.deltaTime, 0f, train.GetCurSpeed());
+			}
+		}
 		//Accept Movement Inputs
 		moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
 		moveDirection = transform.TransformDirection(moveDirection);
@@ -214,6 +234,7 @@ public class FPSCharacter : MonoBehaviour
 
 
 		moveDirection.y = curJump;
+		moveDirection += curTrainFriction;
 		curSpeed = moveDirection.magnitude;
 		return moveDirection;
 	}
