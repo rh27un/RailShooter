@@ -26,4 +26,5 @@ public class EnemyStats : ScriptableObject
 	public float baseBonusPointsDropRate;
 	public float baseMagnetDropRate;
 	public float baseBottomlessClipDropRate;
+	public float speed;
 }

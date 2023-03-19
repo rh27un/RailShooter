@@ -8,6 +8,7 @@ public class TrainController : MonoBehaviour {
 
 	public float speed;
 	public float acceleration;
+	public PlayerHealth playerHealth;
 	[SerializeField] protected float distance;
 	[SerializeField] protected float curSpeed;
 	[SerializeField] protected float zoneLength;
@@ -111,9 +112,24 @@ public class TrainController : MonoBehaviour {
 		if(distance > nextZone){
 			nextZone += zoneLength;
 			zone++;
-			Destroy(terrain);
-			SceneManager.LoadSceneAsync(zone, LoadSceneMode.Additive);
+			GameObject.Find("Canvas").GetComponent<HUDManager>().StartEndScreen();
+			//Destroy(terrain);
+			//SceneManager.LoadSceneAsync(zone, LoadSceneMode.Additive);
 		}
+	}
+
+	public void StartNextLevel()
+	{
+		//nextZone += zoneLength;
+		//zone++;
+		GameObject.Find("Canvas").GetComponent<HUDManager>().EndEndScreen();
+		//Destroy(terrain);
+		SceneManager.LoadSceneAsync(zone, LoadSceneMode.Single);
+		Time.timeScale = 1f;
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
+		playerHealth.NewStage();
+		enemyCount.Clear();
 	}
 
 	List<string> GetEnemiesToSpawn(List<string> toSpawn)

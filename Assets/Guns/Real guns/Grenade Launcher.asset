@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Grenade Launcher
   m_EditorClassIdentifier: 
+  arsenalIndex: 5
   gunPrefab: {fileID: 8893827183453518974, guid: 9723fc5aa33e3c349ad6ea873223ec31,
     type: 3}
   projectilePrefab: {fileID: 407173632034350334, guid: 5c1e43cc6d9c78649811b5b83c3bf251,
     type: 3}
+  hipFireOffset: {x: 0, y: 0, z: 0}
+  aimedOffset: {x: 0, y: 0, z: 0}
   maxAmmo: 6
   infiniteAmmo: 0
   curAmmo: 0
   storedAmmo: 0
   multiShot: 1
   fireRate: 1
-  reloadTime: 6
+  reloadTime: 3
   range: 100
   damage: 50
   splash: 1
@@ -36,7 +39,9 @@ MonoBehaviour:
   inaccuracy: 0.02
   aimedInaccuracy: 0
   aimedFOV: 60
+  aimedSensitivity: 0.66
   recoilDecay: 3
+  scoped: 0
   projectile: 1
   projectileSpeed: 1000
   explodeOnImpact: 0

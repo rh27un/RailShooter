@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: Completely redo this to work with damage boxes
 public class Health : MonoBehaviour
 {
 	public float maxHealth;
@@ -33,7 +32,7 @@ public class Health : MonoBehaviour
 			if (Time.time - lastBurn >= 1f)
 			{
 				//Debug.Log("Burning!");
-				Damage(fireDamage);
+				Damage(fireDamage, new HitInfo() { source = "Fire" });
 				lastBurn = Time.time;
 				if (Time.time - firstBurn >= burnTime)
 				{
@@ -52,7 +51,7 @@ public class Health : MonoBehaviour
 			burnTime = _burnTime;
 			firstBurn = Time.time;
 			//Debug.Log("Burning!");
-			Damage(fireDamage);
+			Damage(fireDamage, new HitInfo() { source = "Fire" });
 			lastBurn = Time.time;
 		}
 		else
@@ -69,7 +68,7 @@ public class Health : MonoBehaviour
 			Die();
 		}
 	}
-	public void Damage(float _damage, HitInfo _info)
+	public virtual void Damage(float _damage, HitInfo _info)
 	{
 		curHealth -= _damage;
 		if(curHealth < 0f)
@@ -95,7 +94,7 @@ public class Health : MonoBehaviour
 		isDead = true;
 	}
 
-	public void Die(HitInfo _info)
+	public virtual void Die(HitInfo _info)
 	{
 		if (isDead)
 			return;
@@ -105,5 +104,4 @@ public class Health : MonoBehaviour
 		Destroy(gameObject);
 		isDead = true;
 	}
-
 }

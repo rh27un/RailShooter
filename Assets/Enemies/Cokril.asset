@@ -32,3 +32,4 @@ MonoBehaviour:
   baseBonusPointsDropRate: 0.6
   baseMagnetDropRate: 0
   baseBottomlessClipDropRate: 0.01
+  speed: 5

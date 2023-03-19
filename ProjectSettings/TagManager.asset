@@ -11,6 +11,7 @@ TagManager:
   - Train
   - LoadOnce
   - HUDManager
+  - TrainFlat
   layers:
   - Default
   - TransparentFX

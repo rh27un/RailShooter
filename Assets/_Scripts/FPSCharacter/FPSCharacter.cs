@@ -32,6 +32,7 @@ public class FPSCharacter : MonoBehaviour
 	public bool invertLook = false;
 	public float baseSensitivity;
 	public float sensitivity = 3f;
+	protected float aimedSensitivity = 3f;
 	public float maxAngle = 70f;
 	public float minAngle = -70f;
 	public bool strafeLean = false;
@@ -80,6 +81,12 @@ public class FPSCharacter : MonoBehaviour
 	protected bool IsGrounded => controller.isGrounded;
 
 	protected Pause pause;
+
+	protected Vector3 gunHipfireOffset;
+
+	protected Vector3 gunAimedOffset;
+
+	protected bool gunScoped;
 	// Use this for initialization
 	void Awake()
 	{
@@ -133,12 +140,13 @@ public class FPSCharacter : MonoBehaviour
 		}
 	}
 
+
 	Vector3 CharacterMove()
 	{
 		RaycastHit floorHit;
-		if(Physics.Raycast(transform.position, Vector3.down, out floorHit, 1.1f))
+		if(Physics.SphereCast(transform.position, 0.5f, Vector3.down, out floorHit, 1.1f))//Physics.Raycast(transform.position, Vector3.down, out floorHit, 1.1f))
 		{
-			if(floorHit.collider.tag == "Train")
+			if(floorHit.collider.tag == "Train" || floorHit.collider.tag == "TrainFlat" || floorHit.collider.tag == "Enemy")
 			{
 				curTrainFriction = Vector3.zero;
 			}
@@ -165,11 +173,11 @@ public class FPSCharacter : MonoBehaviour
 
 				if (cameraComponent.fieldOfView > aimedFOV)
 				{
-					cameraComponent.fieldOfView = Mathf.Clamp(cameraComponent.fieldOfView - zoomSpeed * Time.deltaTime, aimedFOV, walkFOV);
+					cameraComponent.fieldOfView = Mathf.Clamp(cameraComponent.fieldOfView - zoomSpeed * (walkFOV - aimedFOV) * Time.deltaTime, aimedFOV, walkFOV);
 				}
-				if (gun.transform.position != aimed.position)
+				if (gun.transform.localPosition != aimed.localPosition)
 				{
-					gun.transform.position = Vector3.Lerp(gun.transform.position, aimed.position, gunSpeed);
+					gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, aimed.localPosition + gunAimedOffset, gunSpeed);
 					gun.transform.rotation = Quaternion.Lerp(gun.transform.rotation, aimed.rotation, gunSpeed);
 				}
 				if (moveType != MoveType.Sliding && controller.isGrounded)
@@ -184,11 +192,11 @@ public class FPSCharacter : MonoBehaviour
 			}
 			if (cameraComponent.fieldOfView < walkFOV)
 			{
-				cameraComponent.fieldOfView = Mathf.Clamp(cameraComponent.fieldOfView + zoomSpeed * Time.deltaTime, aimedFOV, walkFOV);
+				cameraComponent.fieldOfView = Mathf.Clamp(cameraComponent.fieldOfView + zoomSpeed * (walkFOV - aimedFOV) * Time.deltaTime, aimedFOV, walkFOV);
 			}
-			if (gun.transform.position != unaimed.position)
+			if (gun.transform.localPosition != unaimed.localPosition)
 			{
-				gun.transform.position = Vector3.Lerp(gun.transform.position, unaimed.position, 0.1f);
+				gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, unaimed.localPosition + gunHipfireOffset, 0.1f);
 				gun.transform.rotation = Quaternion.Lerp(gun.transform.rotation, unaimed.rotation, 0.1f);
 			}
 		}
@@ -239,19 +247,36 @@ public class FPSCharacter : MonoBehaviour
 		return moveDirection;
 	}
 
+	public Vector3 GetFriction()
+	{
+		return curTrainFriction;
+	}
+
+	void OnControllerColliderHit(ControllerColliderHit collision)
+	{
+		if(collision.collider.tag != "Train" && collision.collider.tag != "TrainFlat" && collision.collider.tag != "Enemy")
+		{
+			//Debug.Log(collision.normal);
+			//if (collision.normal.x > 0.1f && train.GetCurSpeed() - curTrainFriction.x > 0.1f)
+			//{
+			//	GetComponent<PlayerHealth>().Damage(train.GetCurSpeed() - curTrainFriction.x);
+			//}
+		}
+	}
+
 	void CameraLook()
 	{
-		transform.Rotate(new Vector3(0f, Input.GetAxis("Mouse X") * sensitivity, 0f));
+		transform.Rotate(new Vector3(0f, Input.GetAxis("Mouse X") * (aiming ? aimedSensitivity : sensitivity), 0f));
 		float camAngle = cameraTransform.rotation.eulerAngles.x;
 		if (invertLook)
 		{
-			camAngle += Input.GetAxis("Mouse Y") * sensitivity;
+			camAngle += Input.GetAxis("Mouse Y") * (aiming ? aimedSensitivity : sensitivity);
 		}
 		else
 		{
-			camAngle -= Input.GetAxis("Mouse Y") * sensitivity;
+			camAngle -= Input.GetAxis("Mouse Y") * (aiming ? aimedSensitivity : sensitivity);
 		}
-		gun.transform.position += new Vector3(Input.GetAxis("Mouse X") * Time.deltaTime * sensitivity, Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivity, 0f);
+		gun.transform.position += new Vector3(Input.GetAxis("Mouse X") * Time.deltaTime * (aiming ? aimedSensitivity : sensitivity), Input.GetAxis("Mouse Y") * Time.deltaTime * (aiming ? aimedSensitivity : sensitivity), 0f);
 		camAngle = RotationClamp(camAngle, minAngle, maxAngle);
 		if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.05f)
 		{
@@ -426,14 +451,18 @@ public class FPSCharacter : MonoBehaviour
 	{
 		return Physics.Raycast(transform.position, Vector3.up, 1.1f);
 	}
-	public void SwitchWeapons(GameObject newGun, Vector3 gunStockpile, float gunFOV)
+	public void SwitchWeapons(GameObject newGun, Vector3 gunStockpile, float gunFOV, float gunSensitivity, Vector3 posOffset, Vector3 aimedOffset)
 	{
+		gunHipfireOffset = posOffset;
 		gun.transform.SetParent(null);
 		gun.transform.position = gunStockpile;
 		gun = newGun;
 		gun.transform.SetParent(cameraTransform);
-		gun.transform.position = unaimed.position;
+		gun.transform.position = unaimed.position + posOffset - (Vector3.up * 10);
 		gun.transform.rotation = unaimed.rotation;
+		//gun.transform.Rotate(rotOffset);
 		aimedFOV = gunFOV;
+		aimedSensitivity = sensitivity * gunSensitivity;
+		gunAimedOffset = aimedOffset;
 	}
 }

@@ -8,6 +8,8 @@ public class EnemyProjectile : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		if (other.isTrigger)
+			return;
 		var health = other.gameObject.GetComponent<PlayerHealth>();
 
 		if(health != null)

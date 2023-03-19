@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Railgun
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 781770156292755535, guid: 27aa6669eb4e4c94587a3db1ebf561e4,
+  arsenalIndex: 7
+  gunPrefab: {fileID: 8680388680982505604, guid: b67e3379ce1d9e3409b81f68a0777b77,
     type: 3}
   projectilePrefab: {fileID: 0}
+  hipFireOffset: {x: -0.05, y: -0.13, z: -0.25}
+  aimedOffset: {x: 0.1, y: -0.08, z: -0.25}
   maxAmmo: 10
   infiniteAmmo: 0
   curAmmo: 4
   storedAmmo: 0
   multiShot: 1
   fireRate: 1
-  reloadTime: 2
+  reloadTime: 1
   range: 100
   damage: 100
   splash: 0
@@ -35,7 +38,9 @@ MonoBehaviour:
   inaccuracy: 0.7
   aimedInaccuracy: 0
   aimedFOV: 60
+  aimedSensitivity: 0.66
   recoilDecay: 1
+  scoped: 0
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0

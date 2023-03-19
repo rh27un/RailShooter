@@ -55,7 +55,27 @@ public class Options : MonoBehaviour
 	public float soundEffectVolume;
 	public float voiceVolume;
 
-	protected Resolution[] resolutions;
+	protected Resolution[] resolutions = new Resolution[]{
+		new Resolution(){height = 640, width = 480, refreshRate = 60},
+		new Resolution(){height = 720, width = 480, refreshRate = 60},
+		new Resolution(){height = 720, width = 576, refreshRate = 60},
+		new Resolution(){height = 800, width = 600, refreshRate = 60},
+		new Resolution(){height = 1024, width = 768, refreshRate = 60},
+		new Resolution(){height = 1152, width = 864, refreshRate = 60},
+		new Resolution(){height = 1176, width = 664, refreshRate = 60},
+		new Resolution(){height = 1280, width = 720, refreshRate = 60},
+		new Resolution(){height = 1280, width = 768, refreshRate = 60},
+		new Resolution(){height = 1280, width = 800, refreshRate = 60},
+		new Resolution(){height = 1280, width = 960, refreshRate = 60},
+		new Resolution(){height = 1280, width = 1024, refreshRate = 60},
+		new Resolution(){height = 1366, width = 768, refreshRate = 60},
+		new Resolution(){height = 1440, width = 900, refreshRate = 60},
+		new Resolution(){height = 1600, width = 900, refreshRate = 60},
+		new Resolution(){height = 1600, width = 1024, refreshRate = 60},
+		new Resolution(){height = 1680, width = 1050, refreshRate = 60},
+		new Resolution(){height = 1920, width = 1080, refreshRate = 60},
+		new Resolution(){height = 3840, width = 2160, refreshRate = 60},
+	};
 
 	protected void Awake()
 	{
@@ -64,7 +84,7 @@ public class Options : MonoBehaviour
 
 		resolutionDropdown.ClearOptions();
 		List<string> options = new List<string>();
-		resolutions = Screen.resolutions;
+		//resolutions = Screen.resolutions;
 		options = resolutions.Select(r => $"{r.width} x {r.height}").ToList();
 		resolutionDropdown.AddOptions(options);
 
@@ -134,6 +154,11 @@ public class Options : MonoBehaviour
 		if (PlayerPrefs.HasKey("Resolution"))
 		{
 			int resolutionIndex = PlayerPrefs.GetInt("Resolution");
+			if (resolutionIndex >= resolutions.Length)
+			{
+				PlayerPrefs.SetInt("Resolution", 0);
+				resolutionIndex = 0;
+			}
 			var resolution = resolutions[resolutionIndex];
 			Screen.SetResolution(resolution.width, resolution.height, IsFullscreen);
 			resolutionDropdown.value = resolutionIndex;

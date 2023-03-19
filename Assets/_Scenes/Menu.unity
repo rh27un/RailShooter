@@ -9180,7 +9180,7 @@ PrefabInstance:
     - target: {fileID: 5287033752489175641, guid: 3c8c536b07c8bf14fa355491877b64e9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 37.07
+      value: 43.26
       objectReference: {fileID: 0}
     - target: {fileID: 5287033752489175641, guid: 3c8c536b07c8bf14fa355491877b64e9,
         type: 3}
@@ -9215,7 +9215,7 @@ PrefabInstance:
     - target: {fileID: 5287033752489175641, guid: 3c8c536b07c8bf14fa355491877b64e9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5287033752489175641, guid: 3c8c536b07c8bf14fa355491877b64e9,
         type: 3}
@@ -13958,6 +13958,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471385468}
   m_CullTransparentMesh: 0
+--- !u!1 &1472962000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1472962002}
+  - component: {fileID: 1472962001}
+  m_Layer: 0
+  m_Name: RotateSkybox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1472962001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472962000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c918f0b1ee78014aab6732c9920381e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1472962002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472962000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -682.0089, y: 1048.3657, z: -1320.3551}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1478265915
 GameObject:
   m_ObjectHideFlags: 0
@@ -14151,7 +14194,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 4.14
+  m_ScrollSensitivity: 11.15
   m_Viewport: {fileID: 250241059}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1503060585}
@@ -17359,7 +17402,7 @@ PrefabInstance:
     - target: {fileID: 5287033752489175641, guid: 3c8c536b07c8bf14fa355491877b64e9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 68.54
+      value: 71.86
       objectReference: {fileID: 0}
     - target: {fileID: 5287033752489175641, guid: 3c8c536b07c8bf14fa355491877b64e9,
         type: 3}
@@ -17618,7 +17661,8 @@ MonoBehaviour:
   prefabs:
   - {fileID: 6194652072471986292, guid: 944171e292f853349a3e666b0b10833b, type: 3}
   - {fileID: 2476171278924539241, guid: 3c8c536b07c8bf14fa355491877b64e9, type: 3}
-  spawnRate: 0.645
+  - {fileID: 6194652072471986292, guid: 98d712fc1e7fe5843a4ca8df08e0c6e3, type: 3}
+  spawnRate: 0.55
 --- !u!4 &1870596073
 Transform:
   m_ObjectHideFlags: 0
@@ -17631,7 +17675,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1891427871
 GameObject:

@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 6157054035531824873, guid: 386629edcfa9fe0479b9108ed373052a,
+  arsenalIndex: 0
+  gunPrefab: {fileID: 4997452584375446152, guid: 20e10e03647105d4faf3d5f58cfcfa32,
     type: 3}
   projectilePrefab: {fileID: 0}
+  hipFireOffset: {x: -0.1, y: -0.15, z: -0.3}
+  aimedOffset: {x: 0, y: 0, z: -0.3}
   maxAmmo: 12
   infiniteAmmo: 1
   curAmmo: 12
   storedAmmo: 999
   multiShot: 1
   fireRate: 0.3
-  reloadTime: 2
+  reloadTime: 1
   range: 100
   damage: 20
   splash: 0
@@ -35,7 +38,9 @@ MonoBehaviour:
   inaccuracy: 1
   aimedInaccuracy: 0
   aimedFOV: 60
+  aimedSensitivity: 0.66
   recoilDecay: 2
+  scoped: 0
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0

@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Rocket Launcher
   m_EditorClassIdentifier: 
+  arsenalIndex: 6
   gunPrefab: {fileID: 8893827183453518974, guid: 9723fc5aa33e3c349ad6ea873223ec31,
     type: 3}
   projectilePrefab: {fileID: 3101643855038421271, guid: 6912d30e45677f74fb0e814a66c2cf58,
     type: 3}
+  hipFireOffset: {x: 0, y: 0, z: 0}
+  aimedOffset: {x: 0, y: 0, z: 0}
   maxAmmo: 1
   infiniteAmmo: 0
   curAmmo: 90
   storedAmmo: 0
   multiShot: 1
   fireRate: 1
-  reloadTime: 5
+  reloadTime: 2.5
   range: 0
   damage: 200
   splash: 1
@@ -36,7 +39,9 @@ MonoBehaviour:
   inaccuracy: 1
   aimedInaccuracy: 0
   aimedFOV: 60
+  aimedSensitivity: 0.66
   recoilDecay: 3
+  scoped: 0
   projectile: 1
   projectileSpeed: 2000
   explodeOnImpact: 1

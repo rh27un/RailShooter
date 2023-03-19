@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Farm 2.unity
     guid: 42646a2a8c927de48bc924ce85e5a4da
+  - enabled: 1
+    path: Assets/_Scenes/Hills.unity
+    guid: aaa9f19ead0152c4fb1f6bfaead2a221
+  - enabled: 1
+    path: Assets/_Scenes/Mountain.unity
+    guid: 5bad53d9df07f014cb05b48e3f90c9b8
   m_configObjects: {}

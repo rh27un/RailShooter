@@ -47,6 +47,7 @@ public class Pause : MonoBehaviour
 		}
     }
 
+
 	public void Resume()
 	{
 		isPause = false;

@@ -182,4 +182,11 @@ public class PlayerHealth : Health
 		if (continues == -1)
 			infiniteContinues = true;
 	}
+
+	public void NewStage()
+	{
+		Respawn(maxLives, continues);
+		transform.position = spawnPoint.position;
+		transform.rotation = spawnPoint.rotation;
+	}
 }

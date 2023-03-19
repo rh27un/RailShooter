@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Sniper Rifle
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 781770156292755535, guid: 27aa6669eb4e4c94587a3db1ebf561e4,
+  arsenalIndex: 4
+  gunPrefab: {fileID: 4327348131650907953, guid: 5669a1c6bb94b8a429c858436bce925d,
     type: 3}
   projectilePrefab: {fileID: 0}
+  hipFireOffset: {x: -0.1, y: 0, z: -0.1}
+  aimedOffset: {x: 0, y: 0, z: 0}
   maxAmmo: 4
   infiniteAmmo: 0
   curAmmo: 3
   storedAmmo: 0
   multiShot: 1
   fireRate: 1
-  reloadTime: 2
+  reloadTime: 1
   range: 500
   damage: 50
   splash: 0
@@ -35,7 +38,9 @@ MonoBehaviour:
   inaccuracy: 0.1
   aimedInaccuracy: 0
   aimedFOV: 10
+  aimedSensitivity: 0.12
   recoilDecay: 3
+  scoped: 1
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0

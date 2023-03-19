@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 9193120046225911190, guid: bba14424fe7228849be3b40619b4215b,
+  arsenalIndex: 3
+  gunPrefab: {fileID: 2606080815780179799, guid: 7e0ba0beb5279384e872baf16697ab4d,
     type: 3}
   projectilePrefab: {fileID: 0}
+  hipFireOffset: {x: -0.1, y: -0.1, z: -0.4}
+  aimedOffset: {x: 0, y: 0, z: -0.4}
   maxAmmo: 6
   infiniteAmmo: 0
   curAmmo: 0
   storedAmmo: 0
   multiShot: 10
   fireRate: 0.6
-  reloadTime: 6
+  reloadTime: 3
   range: 50
   damage: 10
   splash: 0
@@ -35,7 +38,9 @@ MonoBehaviour:
   inaccuracy: 2
   aimedInaccuracy: 0
   aimedFOV: 60
+  aimedSensitivity: 0.66
   recoilDecay: 2
+  scoped: 0
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0

@@ -40,6 +40,8 @@ public class Enemy : MonoBehaviour
 	protected GameObject magnetPickup;
 	[SerializeField]
 	protected GameObject bottomlessClipPickup;
+
+	protected float jumpTimer;
 	void Awake()
 	{
 		health = gameObject.AddComponent<Health>();
@@ -48,23 +50,62 @@ public class Enemy : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		playerController = player.GetComponent<CharacterController>();
 		agent = GetComponent<NavMeshAgent>();
+		agent.autoTraverseOffMeshLink = false;
+		agent.speed = stats.speed;
 		dontFireTime = stats.dontFireTime + Random.Range(-1f, 1f);
 		//aimMarker = Instantiate(aimMarkerPrefab).transform;
 		//curState = EnemyState.Shooting;
 		StartCoroutine("SwitchStates");
 	}
 
+	IEnumerator NormalSpeed()
+	{
+		OffMeshLinkData data = agent.currentOffMeshLinkData;
+		Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
+		while (agent.transform.position != endPos)
+		{
+			agent.transform.position = Vector3.MoveTowards(agent.transform.position, endPos, agent.speed * Time.deltaTime);
+			yield return null;
+		}
+		agent.CompleteOffMeshLink();
+	}
+
+	IEnumerator Parabola(float height, float duration)
+	{
+		OffMeshLinkData data = agent.currentOffMeshLinkData;
+		Vector3 startPos = agent.transform.position;
+		Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
+		float horizontalDistance = (new Vector2(startPos.x, startPos.z) - new Vector2(endPos.x, endPos.z)).magnitude;
+		float normalizedTime = 0.0f;
+		while (normalizedTime < 1.0f)
+		{
+			float yOffset = height * horizontalDistance * (normalizedTime - normalizedTime * normalizedTime);
+			agent.transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
+			normalizedTime += Time.deltaTime / duration;
+			yield return null;
+		}
+	}
+
 	private void Update()
 	{
+		if (agent.isOnOffMeshLink && jumpTimer < 0f)
+		{
+			jumpTimer = 3f;
+			StartCoroutine(Parabola(4f, 0.5f));
+			agent.CompleteOffMeshLink();
+		}
+		jumpTimer -= Time.deltaTime;
 		var toPlayerVector = transform.position - player.position;
 		float distanceToPlayer = toPlayerVector.magnitude;
 		if (distanceToPlayer > stats.idealPlayerDistance)
 		{
 			agent.SetDestination(player.position);
+				//bug.LogError("Failed to set destination");
 		}
 		else
 		{
 			agent.SetDestination(transform.position + toPlayerVector);
+				//bug.LogError("Failed to set destination");
 		}
 		var timeToPlayer = distanceToPlayer / (stats.projectileSpeed * predictMod);
 		var predictedPosition = player.position + (playerController.velocity * timeToPlayer);

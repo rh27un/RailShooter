@@ -2,22 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss : MonoBehaviour
+public class BossHealth : Health
 {
-	protected Health health;
 	protected HUDManager hudManager;
 	protected TrainController trainController;
 	public void Awake()
 	{
 		trainController = GameObject.FindGameObjectWithTag("GameController").GetComponent<TrainController>();
 		hudManager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
-		health = gameObject.GetComponent<Health>();
 		hudManager.StartBossFight(gameObject.name);
 		trainController.StartBossTimer(10000f);
 	}
 
-	private void Update()
+	public override void Damage(float _damage, HitInfo _info)
 	{
-		hudManager.SetBossHealth(health.CurHealth / health.maxHealth);
+		base.Damage(_damage, _info);
+		hudManager.SetBossHealth(curHealth / maxHealth);
+	}
+
+	public override void Die(HitInfo _info)
+	{
+		base.Die(_info);
+		hudManager.SetBossHealth(curHealth / maxHealth);
+		hudManager.EndBossFight();
+		trainController.EndBossTimer();
 	}
 }

@@ -12,6 +12,11 @@ public enum ScoreType
 }
 public class Score : MonoBehaviour
 {
+	public float stageClearBonus = 1000f;
+	public float liveLeftBonus = 100f;
+
+	protected float stageScore = 0;
+
 	protected float score = 0;
 	protected float multiplier = 1;
 	protected float lastScore;
@@ -35,6 +40,7 @@ public class Score : MonoBehaviour
 	void Awake()
 	{
 		score = 0;
+		stageScore = 0;
 		hUDManager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
 		hUDManager.SetScoreText(score);
 	}
@@ -137,6 +143,7 @@ public class Score : MonoBehaviour
 		multiplier += multiplierIncrement;
 		hUDManager.SetMultiplierText(multiplier, 0f);
 		score += multipliedPoints;
+		stageScore += multipliedPoints;
 		hUDManager.SetScoreText(score);
 		toggle = true;
 	}
@@ -151,9 +158,22 @@ public class Score : MonoBehaviour
 		multiplier += multiplierIncrement;
 		hUDManager.SetMultiplierText(multiplier, 0f);
 		score += pointsToAdd;
+		stageScore+= pointsToAdd;
 		hUDManager.SetScoreText(score);
 		toggle = true;
 	}
+
+	public void NewStage()
+	{
+		stageScore = 0;
+	}
+
+	public void ScorePoints(float points)
+	{
+		score += points;
+		stageScore += points;
+	}
+
 	public void ScorePoints(float points, string message, float _multiplierIncrement)
 	{
 		lastScore = Time.time;
@@ -164,6 +184,7 @@ public class Score : MonoBehaviour
 		multiplier += _multiplierIncrement;
 		hUDManager.SetMultiplierText(multiplier, 0f);
 		score += pointsToAdd;
+		stageScore += pointsToAdd;
 		hUDManager.SetScoreText(score);
 		toggle = true;
 	}
@@ -179,9 +200,15 @@ public class Score : MonoBehaviour
 		return score;
 	}
 
-	public void Checkpoint(float _score)
+	public float GetStageScore()
+	{ 
+		return stageScore;
+	}
+
+	public void Checkpoint(float _score, float _stageScore)
 	{
 		score = _score;
+		stageScore = _stageScore;
 		multiplier = 1f;
 		newScores.Clear();
 		hUDManager.SetScoreText(score);

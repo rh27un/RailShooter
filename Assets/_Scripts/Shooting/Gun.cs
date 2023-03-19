@@ -5,9 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "gunData", menuName = "Guns/Gun", order = 1)]
 public class Gun : ScriptableObject
 {
+	public int arsenalIndex;
+
 	[Header("Visuals")]
 	public GameObject gunPrefab;
 	public GameObject projectilePrefab;
+	public Vector3 hipFireOffset;
+	//public Vector3 hipFireRotationOffset;
+	public Vector3 aimedOffset;
 
 	[Header("Ammo & Reload")]
 	public int maxAmmo; //maximum ammunition
@@ -36,7 +41,9 @@ public class Gun : ScriptableObject
 	public float inaccuracy;
 	public float aimedInaccuracy;
 	public float aimedFOV;
+	public float aimedSensitivity;
 	public float recoilDecay;
+	public bool scoped;
 
 	[Header("Projectile")]
 	public bool projectile; //fires a projectile if true, uses raycast if false

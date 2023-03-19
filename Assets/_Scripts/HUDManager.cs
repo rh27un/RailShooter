@@ -69,6 +69,29 @@ public class HUDManager : MonoBehaviour
 	[SerializeField]
 	protected RectTransform rightCross;
 
+	[SerializeField]
+	protected TMP_Text stageScoreText;
+	[SerializeField]
+	protected TMP_Text stageBonusText;
+	[SerializeField]
+	protected TMP_Text livesLeftText;
+	[SerializeField]
+	protected TMP_Text livesBonusText;
+	[SerializeField]
+	protected TMP_Text totalScoreText;
+	[SerializeField]
+	protected GameObject header;
+	[SerializeField]
+	protected GameObject stageScoreLabel;
+	[SerializeField]
+	protected GameObject stageBonusLabel;
+	[SerializeField]
+	protected GameObject livesLeftLabel;
+	[SerializeField]
+	protected GameObject totalScoreLabel;
+	[SerializeField]
+	protected GameObject continueButton;
+
 	protected RectTransform multiplierTransform;
 
 	protected bool animatingMultiplier;
@@ -81,19 +104,65 @@ public class HUDManager : MonoBehaviour
 	protected float multiplierTimeScale = 1f;
 	protected float mutliplierAnimStart;
 	protected float tension;
+
+	protected bool stageEnded;
+
+	[SerializeField]
+	protected Score scoreKeeper;
+	protected float stageScore;
+	protected float totalScore;
+	protected float livesLeft;
 	//public bool IsFirstToLoad { get; set; }
 
+	public TMP_Text stageName;
+	public TMP_Text stageDescription;
+	public Color textTargetColor;
+	public Color textStartColor;
+	public float textColorNow;
 	private void Awake()
 	{
-		//SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.sceneLoaded += OnSceneLoaded;
 		multiplierTransform = multiplierText.GetComponent<RectTransform>();
 		multiplierStartPos = multiplierTransform.anchoredPosition;
+		textTargetColor = Color.white;
+	}
+
+	void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		int stageIndex = scene.buildIndex;
+		if (stageIndex < 3)
+			return;
+		textStartColor = new Color(1f, 1f, 1f, 0f);
+		textTargetColor = Color.white;
+		textColorNow = 0f;
+		stageName.text = $"Stage {stageIndex - 2} - {scene.name}";
+		switch(stageIndex)
+		{
+			case 3:
+				stageDescription.text = "Get on the train!";
+				break;
+			default:
+				stageDescription.text = string.Empty;
+				break;
+		}
+
 	}
 	private void Update()
 	{
 		if(fadeImage.color != targetColor)
 		{
 			fadeImage.color = Color.Lerp(fadeImage.color, targetColor, fadeTime);
+		}
+
+		if(stageName.color != textTargetColor)
+		{
+			textColorNow += Time.deltaTime;
+			Color color = Color.Lerp(textStartColor, textTargetColor, textColorNow);
+			stageName.color = color;
+			stageDescription.color = color;
+		} else if(stageName.color == Color.white)
+		{
+			StartCoroutine("TextFadeOut");
 		}
 
 		if (isReloading)
@@ -144,6 +213,14 @@ public class HUDManager : MonoBehaviour
 		}
 	}
 	
+	public IEnumerator TextFadeOut()
+	{
+		yield return new WaitForSeconds(2f);
+		textStartColor = Color.white;
+		textTargetColor = new Color(1f, 1f, 1f, 0f);
+		textColorNow = 0f;
+	}
+
 	protected void CancelMultiplierAnimation()
 	{
 		if (animatingMultiplier)
@@ -171,6 +248,86 @@ public class HUDManager : MonoBehaviour
 		multiplierEndColor = new Color(1f, 1f, 1f, 0f);
 		mutliplierAnimStart = Time.time;
 		animatingMultiplier = true;
+	}
+
+	public void StartEndScreen()
+	{
+		StartCoroutine("AnimateEndScreen");
+	}
+
+	protected IEnumerator AnimateEndScreen()
+	{
+		header.SetActive(true);
+		SetColor(Color.black);
+		stageEnded = true;
+		yield return new WaitForSecondsRealtime(1f);
+		Time.timeScale = 0f;
+		yield return new WaitForSecondsRealtime(0.5f);
+		stageScoreLabel.SetActive(true);
+		stageScoreText.gameObject.SetActive(true);
+		stageScoreText.text = "00000000000";
+		yield return new WaitForSecondsRealtime(0.5f);
+		totalScoreLabel.SetActive(true);
+		totalScoreText.gameObject.SetActive(true);
+		totalScoreText.text = "00000000000";
+		yield return new WaitForSecondsRealtime(0.5f);
+		//
+		stageBonusLabel.SetActive(true);
+		stageBonusText.gameObject.SetActive(true);
+		yield return new WaitForSecondsRealtime(0.5f);
+		livesLeftLabel.SetActive(true);
+		livesLeftText.gameObject.SetActive(true);
+		yield return new WaitForSecondsRealtime(0.5f);
+
+		//var tenth = scoreKeeper.GetStageScore() / 27;
+		var twenth = scoreKeeper.GetScore() / 27;
+		for(int i = 1; i <= 27; i++)
+		{
+			stageScoreText.text = Mathf.Min((twenth * i), scoreKeeper.GetStageScore()).ToString("00000000000");
+			totalScoreText.text = (twenth * i).ToString("00000000000");
+			yield return new WaitForSecondsRealtime(0.05f);
+		}
+		yield return new WaitForSecondsRealtime(0.5f);
+		scoreKeeper.ScorePoints(scoreKeeper.stageClearBonus); 
+		stageBonusText.text = scoreKeeper.stageClearBonus.ToString("0");
+		stageScoreText.text = scoreKeeper.GetStageScore().ToString("00000000000");
+		totalScoreText.text = scoreKeeper.GetScore().ToString("00000000000");
+		yield return new WaitForSecondsRealtime(0.5f);
+		float lifeBonus = 0f;
+		while(livesLeft > 0)
+		{
+			lifeBonus += scoreKeeper.liveLeftBonus;
+			livesLeft--;
+			livesLeftText.text = livesLeft.ToString();
+			livesBonusText.gameObject.SetActive(true);
+			livesBonusText.text = $"+ {lifeBonus}";
+			scoreKeeper.ScorePoints(scoreKeeper.liveLeftBonus);
+			stageScoreText.text = scoreKeeper.GetStageScore().ToString("00000000000");
+			totalScoreText.text = scoreKeeper.GetScore().ToString("00000000000");
+			yield return new WaitForSecondsRealtime(0.5f);
+		}
+		yield return new WaitForSecondsRealtime(0.5f);
+		continueButton.SetActive(true);
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
+	}
+
+	public void EndEndScreen()
+	{
+		stageEnded = false;
+		header.SetActive(false);
+		stageScoreLabel.SetActive(false);
+		stageScoreText.gameObject.SetActive(false);
+		totalScoreLabel.SetActive(false);
+		totalScoreText.gameObject.SetActive(false);
+		stageBonusLabel.SetActive(false);
+		stageBonusText.gameObject.SetActive(false);
+		livesLeftLabel.SetActive(false);
+		livesLeftText.gameObject.SetActive(false);
+		livesBonusText.gameObject.SetActive(false);
+		continueButton.SetActive(false);
+		SetColor(Color.clear);
+		scoreKeeper.NewStage();
 	}
 
 	public void StartReload(float _reloadTime)
@@ -201,6 +358,7 @@ public class HUDManager : MonoBehaviour
 	}
 	public void SetColor(Color _targetColor)
 	{
+		if(stageEnded) return;
 		targetColor = _targetColor;
 	}
 	public void SetColor(Color _currentColor, Color _targetColor)
@@ -256,6 +414,8 @@ public class HUDManager : MonoBehaviour
 	public void SetLivesText(int lives)
 	{
 		livesText.text = Mathf.Max(lives, 0).ToString();
+		livesLeftText.text = Mathf.Max(lives, 0).ToString();
+		livesLeft = lives;
 	}
 
 	public void ShowContinueScreen()
@@ -301,6 +461,8 @@ public class HUDManager : MonoBehaviour
 	public void SetScoreText(float score)
 	{
 		scoreText.text = score.ToString("N0");
+		totalScore = score;
+		stageScore = score;
 	}
 
 	public void StartBossFight(string bossName)

@@ -10,8 +10,8 @@ public class Shooting : MonoBehaviour
 	protected HUDManager hUDManager;
 	public Vector3 hiddenGunStockpile;
 	protected FPSCharacter characterScript;
-	public List<Gun> guns;
-	protected List<GameObject> gunObjects;
+	public SortedList<int, Gun> guns = new SortedList<int, Gun>();
+	protected SortedList<int, GameObject> gunObjects;
 	protected Gun gun;
 	protected int gunIndex;
 	public GameObject projectilePrefab;
@@ -29,22 +29,25 @@ public class Shooting : MonoBehaviour
 	protected float spreadDecay = 0.1f;
 	[SerializeField]
 	protected float spreadMod;
-	protected int layermask = 1 << 10 | 1 << 11;
+	protected int layermask = 1 << 10 | 1 << 11 | 1 << 13;
 	public Gun melee;  
 	public string gunsToLoad;
 	protected Pause pause;
 	protected bool bottomlessClip;
 	protected float extraDamageMod = 1f;
+	public Gun startingPistol;
+	public GameObject scopeImage;
 	void Start()
 	{
 		SceneManager.sceneLoaded += OnSceneLoaded;
 		hUDManager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
 		pause = GameObject.FindGameObjectWithTag("GameController").GetComponent<Pause>();
 		gunIndex = 0;
-		gunObjects = new List<GameObject>();
+		gunObjects = new SortedList<int, GameObject>();
+		guns.Add(startingPistol.arsenalIndex, startingPistol);
 		for (int i = 0; i < guns.Count; i++)
 		{
-			gunObjects.Add(Instantiate(guns[i].gunPrefab, hiddenGunStockpile, Quaternion.identity));
+			gunObjects.Add(guns[i].arsenalIndex, Instantiate(guns[i].gunPrefab, hiddenGunStockpile, Quaternion.identity));
 			guns[i].curAmmo = guns[i].maxAmmo;
 			guns[i].storedAmmo = 999;
 		}
@@ -53,7 +56,7 @@ public class Shooting : MonoBehaviour
 
 		layermask = ~layermask;
 		characterScript = GetComponent<FPSCharacter>();
-		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
+		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV, (gun.aimedSensitivity > 0 ? gun.aimedSensitivity : 1), guns[gunIndex].hipFireOffset, guns[gunIndex].aimedOffset);
 
 		gunLoc = gunObjects[gunIndex].transform;
 		gun.curAmmo = gun.maxAmmo;
@@ -117,6 +120,14 @@ public class Shooting : MonoBehaviour
 
 	void Update()
 	{
+		for(int i = 49; i < 57; i++)
+		{
+			if (i - 49 < guns.Count() && i - 49 >= 0)
+			{
+				if (Input.GetKeyUp((KeyCode)i))
+					SwitchWeapon(i - 49);
+			}
+		}
 		if (Input.GetButton("Fire1") && !pause.isPause)
 		{
 			if (!isCharger)
@@ -258,10 +269,24 @@ public class Shooting : MonoBehaviour
 		if (characterScript.aiming)
 		{
 			hUDManager.SetInaccuracy(gun.aimedInaccuracy + spread);
+			if (gun.scoped)
+			{
+				gunObjects[gunIndex].SetActive(false);
+				scopeImage.SetActive(true);
+			}
 		}
 		else
 		{
 			hUDManager.SetInaccuracy(gun.inaccuracy + spread);
+			if (gun.scoped)
+			{
+				gunObjects[gunIndex].SetActive(true);
+				scopeImage.SetActive(false);
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.F1))
+		{
+			hUDManager.StartEndScreen();
 		}
 	}
 	IEnumerator Reload()
@@ -269,6 +294,8 @@ public class Shooting : MonoBehaviour
 		//Debug.Log("Reloading!");
 		reloading = true;
 		hUDManager.StartReload(gun.reloadTime);
+		if (gunObjects[gunIndex].GetComponent<Animator>() != null)
+			gunObjects[gunIndex].GetComponent<Animator>().SetTrigger("Reload");
 		yield return new WaitForSeconds(gun.reloadTime);
 		//Debug.Log("Done!");
 		if (!gun.infiniteAmmo)
@@ -357,7 +384,10 @@ public class Shooting : MonoBehaviour
 		if(!bottomlessClip)
 			gun.curAmmo--;
 		hUDManager.SetAmmoText(gun.curAmmo, gun.storedAmmo);
-		gunObjects[gunIndex].GetComponent<Animation>().Play();
+		if (gunObjects[gunIndex].GetComponent<Animation>() != null)
+			gunObjects[gunIndex].GetComponent<Animation>().Play();
+		else
+			gunObjects[gunIndex].GetComponent<Animator>().SetTrigger("Shoot");
 		if (!gun.projectile)
 		{
 			//raycast
@@ -477,7 +507,7 @@ public class Shooting : MonoBehaviour
 		isCharger = (gun.damageCharge || gun.fireDamageCharge || gun.inaccuracyCharge || gun.multiShotCharge || gun.recoilCharge || gun.splashRangeCharge);
 		spread = 0f;
 		projectilePrefab = gun.projectilePrefab;
-		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
+		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV, (gun.aimedSensitivity > 0 ? gun.aimedSensitivity : 1), guns[gunIndex].hipFireOffset, guns[gunIndex].aimedOffset);
 		hUDManager.SetGunText(gun.name);
 		hUDManager.SetAmmoText(gun.curAmmo, gun.storedAmmo);
 		hUDManager.EndReload();
@@ -490,7 +520,7 @@ public class Shooting : MonoBehaviour
 		Gun myGun = null;
 
 		//find the gun in our inventory by name
-		foreach (Gun g in guns)
+		foreach (Gun g in guns.Values)
 		{
 			if (g.name == _gun.name)
 			{
@@ -510,8 +540,8 @@ public class Shooting : MonoBehaviour
 			_gun.curAmmo = _gun.maxAmmo;
 			_gun.storedAmmo -= _gun.maxAmmo;
 
-			guns.Add(_gun);
-			gunObjects.Add(Instantiate(_gun.gunPrefab, hiddenGunStockpile, Quaternion.identity));
+			guns.Add(_gun.arsenalIndex, _gun);
+			gunObjects.Add(_gun.arsenalIndex, Instantiate(_gun.gunPrefab, hiddenGunStockpile, Quaternion.identity));
 			gunIndex = guns.Count - 1;
 			gun = guns[gunIndex];
 			gunLoc = gunObjects[gunIndex].transform;
@@ -519,7 +549,7 @@ public class Shooting : MonoBehaviour
 			isCharger = (gun.damageCharge || gun.fireDamageCharge || gun.inaccuracyCharge || gun.multiShotCharge || gun.recoilCharge || gun.splashRangeCharge);
 			spread = 0f;
 
-			characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
+			characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV, (gun.aimedSensitivity > 0 ? gun.aimedSensitivity : 1), guns[gunIndex].hipFireOffset, guns[gunIndex].aimedOffset);
 			hUDManager.SetGunText(gun.name);
 			hUDManager.SetAmmoText(gun.curAmmo, gun.storedAmmo);
 		}
@@ -528,8 +558,8 @@ public class Shooting : MonoBehaviour
 
 	public void LoadWeapon(Gun _gun)
 	{
-		guns.Add(_gun);
-		gunObjects.Add(Instantiate(_gun.gunPrefab, hiddenGunStockpile, Quaternion.identity));
+		guns.Add(_gun.arsenalIndex, _gun);
+		gunObjects.Add(_gun.arsenalIndex, Instantiate(_gun.gunPrefab, hiddenGunStockpile, Quaternion.identity));
 	}
 
 	public void SwitchWeapon(int index)
@@ -540,7 +570,7 @@ public class Shooting : MonoBehaviour
 		isCharger = (gun.damageCharge || gun.fireDamageCharge || gun.inaccuracyCharge || gun.multiShotCharge || gun.recoilCharge || gun.splashRangeCharge);
 		spread = 0f;
 
-		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV);
+		characterScript.SwitchWeapons(gunObjects[gunIndex], hiddenGunStockpile, gun.aimedFOV, (gun.aimedSensitivity > 0 ? gun.aimedSensitivity : 1), guns[gunIndex].hipFireOffset, guns[gunIndex].aimedOffset);
 		hUDManager.SetGunText(gun.name);
 		hUDManager.SetAmmoText(gun.curAmmo, gun.storedAmmo);
 	}

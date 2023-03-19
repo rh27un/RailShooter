@@ -23,6 +23,9 @@ public class Serializer : MonoBehaviour
 	protected Transform spawnpoint;
 	protected Transform player;
 	protected float terrainXPos = -15666;
+
+	public GameObject errorScreen;
+	protected bool isError = false;
 	private void Awake()
 	{
 		SceneManager.sceneLoaded += OnSceneLoaded;
@@ -66,11 +69,14 @@ public class Serializer : MonoBehaviour
 
 	public void SaveCheckpoint()
 	{
+		if (isError)
+			return;
 		float trainDistance = trainController.GetDistance();
 		float trainSpeed = trainController.GetCurSpeed();
 		int zone = trainController.GetZone();
 		terrainXPos = terrain.position.x;
 		float curScore = score.GetScore();
+		float stageScore = score.GetStageScore();
 		int maxLives = playerHealth.maxLives;
 		int continues = playerHealth.continues;
 		if (continues == 0)
@@ -115,47 +121,54 @@ public class Serializer : MonoBehaviour
 		float trainSpeed;
 		int zone;
 		float curScore;
+		float stageScore;
 		int maxLives;
 		int continues;
 		if (File.Exists(fileName))
 		{
-			using (var stream = File.Open(fileName, FileMode.Open))
+			try
 			{
-				using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+				using (var stream = File.Open(fileName, FileMode.Open))
 				{
-					trainDistance = reader.ReadSingle();
-					trainSpeed = reader.ReadSingle();
-					zone = reader.ReadInt32();
-					terrainXPos = reader.ReadSingle();
-					curScore = reader.ReadSingle();
-					maxLives = reader.ReadInt32();
-					continues = reader.ReadInt32();
-					guns = reader.ReadString();
+					using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+					{
+						trainDistance = reader.ReadSingle();
+						trainSpeed = reader.ReadSingle();
+						zone = reader.ReadInt32();
+						terrainXPos = reader.ReadSingle();
+						curScore = reader.ReadSingle();
+						maxLives = reader.ReadInt32();
+						continues = reader.ReadInt32();
+						guns = reader.ReadString();
+					}
+				}
+				trainController.SetDistance(trainDistance);
+				trainController.SetCurSpeed(trainSpeed);
+				trainController.SetZone(zone);
+				score.Checkpoint(curScore, 0f);
+				player.position = spawnpoint.position;
+				player.rotation = spawnpoint.rotation;
+				player.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+				playerHealth.Respawn(maxLives, continues);
+				if (continues == 0)
+				{
+					File.Delete(fileName);
+					return;
 				}
 			}
-
-			trainController.SetDistance(trainDistance);
-			trainController.SetCurSpeed(trainSpeed);
-			trainController.SetZone(zone);
-			score.Checkpoint(curScore);
-			player.position = spawnpoint.position;
-			player.rotation = spawnpoint.rotation;
-			player.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-			playerHealth.Respawn(maxLives, continues);
-			Debug.Log(continues);
-			if (continues == 0)
+			catch (EndOfStreamException e)
 			{
-				File.Delete(fileName);
-				return;
+				isError = true;
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+				errorScreen.SetActive(true);
+				Time.timeScale = 0.0f;
 			}
 		} 
 		else
 		{
 			Debug.LogError("File " + fileName + " does not exist");
 		}
-
-		
-
 	}
 	public void DeleteCheckpoint()
 	{

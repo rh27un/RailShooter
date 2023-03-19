@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Assault Rifle
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 7721396989209497473, guid: a4123ac1b47ba4b4c9a558a517475647,
+  arsenalIndex: 2
+  gunPrefab: {fileID: 115311263950730315, guid: 71d19f7e846c63a48bf97e9509d8dc81,
     type: 3}
   projectilePrefab: {fileID: 0}
+  hipFireOffset: {x: -0.15, y: -0.1, z: -0.4}
+  aimedOffset: {x: 0, y: 0, z: -0.4}
   maxAmmo: 32
   infiniteAmmo: 0
   curAmmo: 32
   storedAmmo: 0
   multiShot: 1
   fireRate: 0.05
-  reloadTime: 3
+  reloadTime: 1.5
   range: 100
   damage: 5
   splash: 0
@@ -35,7 +38,9 @@ MonoBehaviour:
   inaccuracy: 1
   aimedInaccuracy: 0.3
   aimedFOV: 60
+  aimedSensitivity: 0.66
   recoilDecay: 3
+  scoped: 0
   projectile: 0
   projectileSpeed: 0
   explodeOnImpact: 0

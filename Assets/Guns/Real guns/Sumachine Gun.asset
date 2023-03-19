@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8ef2c9e13d1e0429deaad94b1c8a53, type: 3}
   m_Name: Sumachine Gun
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 1466734283659604444, guid: ab064c2d42a92f84f82c458efaff9dbb,
+  arsenalIndex: 1
+  gunPrefab: {fileID: 953411428329179216, guid: 2da3286556535504da3341dfb36d8488,
     type: 3}
   projectilePrefab: {fileID: 0}
+  hipFireOffset: {x: -0.1, y: -0.1, z: -0.2}
+  aimedOffset: {x: 0, y: 0, z: -0.2}
   maxAmmo: 50
   infiniteAmmo: 0
   curAmmo: 0
   storedAmmo: 88
   multiShot: 1
   fireRate: 0.05
-  reloadTime: 2
+  reloadTime: 1
   range: 100
   damage: 8
   splash: 0
@@ -35,6 +38,7 @@ MonoBehaviour:
   inaccuracy: 1.5
   aimedInaccuracy: 1
   aimedFOV: 60
+  aimedSensitivity: 0.66
   recoilDecay: 3
   projectile: 0
   projectileSpeed: 0
